@@ -50,6 +50,64 @@ class PesananController extends Controller
 
     }
     
+    public function editPembayaran($id)
+    {
+        $pesanan = Pesanan::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+        // Panggil view di folder user.transaksi.edit_pembayaran.blade.php misal
+        return view('user.transaksi.edit', compact('pesanan'));
+        
+    }
+
+    public function updatePembayaran(Request $request, $id)
+    {
+        $request->validate([
+            'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $pesanan = Pesanan::where ('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        if($request->hasFile('bukti_pembayaran')) {
+            $file = $request->file('bukti_pembayaran');
+            $filename = time() . '_' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/bukti_pembayaran'), $filename);
+
+            if ($request->hasFile('bukti_pembayaran')) {
+                $file = $request->file('bukti_pembayaran');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/bukti_pembayaran'), $filename);
+        
+                if ($pesanan->bukti_pembayaran && file_exists(public_path('uploads/bukti_pembayaran/' . $pesanan->bukti_pembayaran))) {
+                    unlink(public_path('uploads/bukti_pembayaran/' . $pesanan->bukti_pembayaran));
+                }
+        
+                $pesanan->bukti_pembayaran = $filename;
+                $pesanan->status_pembayaran = 'Menunggu Konfirmasi';
+                $pesanan->save();
+        
+                return redirect()->route('user.transaksi.index')->with('success', 'Bukti pembayaran berhasil diupload.');
+            }
+        
+            return redirect()->back()->with('error', 'Gagal mengupload bukti pembayaran.');
+        }
+    }
+
+        public function userTransaksiIndex()
+        {
+            $userId = Auth::id();
+        
+            $transaksis = Transaksi::whereHas('pesanan', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->with(['pesanan.kategoriPakaian', 'pesanan.layanan'])->get();
+        
+            return view('user.transaksi.index', compact('transaksis'));
+        }
+
+
 
     public function adminCreate()
     {

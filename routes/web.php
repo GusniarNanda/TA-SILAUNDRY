@@ -110,5 +110,11 @@ Route::prefix('user')->middleware(['auth', IsUser::class])->group(function () {
     Route::get('/pesanan/create', [PesananController::class, 'create'])->name('user.pesanan.create');
     Route::post('/pesanan', [PesananController::class, 'store'])->name('user.pesanan.store');
     Route::get('/transaksi', [DashboardController::class, 'UserTransaksi'])->name('user.transaksi.index');
+    // Route::get('/user/transaksi/{id}/edit-pembayaran', [PesananController::class, 'editPembayaran'])->name('user.transaksi.editPembayaran');
+    // Route::put('/user/transaksi/{id}/update-pembayaran', [PesananController::class, 'updatePembayaran'])->name('user.transaksi.updatePembayaran');
+    // Route::get('/user/transaksi', [DashboardController::class, 'userTransaksiIndex'])->name('user.transaksi.index');
+    Route::get('transaksi/{id}/edit', [DashboardController::class, 'editPembayaran'])->name('user.transaksi.edit');
+    Route::post('transaksi/{id}', [DashboardController::class, 'updatePembayaran'])->name('user.transaksi.update');
+    Route::get('/transaksi', [DashboardController::class, 'userTransaksiIndex'])->name('user.transaksi.index');
 });
     // Route::get('/pelanggan', [PelangganController::class, 'index'])->name('user.pelanggan.index');
