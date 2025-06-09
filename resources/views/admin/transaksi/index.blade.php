@@ -32,6 +32,7 @@
                                 <th>Total Bayar</th>
                                 <th>Tanggal Bayar</th>
                                 <th>Status Pembayaran</th>
+                                <th>Bukti Pembayaran</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -62,6 +63,17 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
+                                        @if ($transaksi->pesanan->bukti_pembayaran)
+                                            <a href="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
+                                                target="_blank">
+                                                <img src="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
+                                                    alt="Bukti" width="80" class="img-thumbnail">
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Belum diupload</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}"
                                             class="btn btn-sm btn-warning" title="Edit">
                                             <i class="fas fa-edit"></i>
@@ -80,7 +92,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center">Belum ada data transaksi.</td>
+                                    <td colspan="10" class="text-center">Belum ada data transaksi.</td>
                                 </tr>
                             @endforelse
                         </tbody>

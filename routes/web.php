@@ -15,6 +15,7 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUser;
 use App\Http\Middleware\IsOwner;
+use App\Http\Controllers\DepositController;
 
 // Halaman publik (landing page dan halaman statis)
 Route::get('/', fn() => view('home'));
@@ -60,6 +61,9 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::delete('/pesanan/{id}', [PesananController::class, 'adminDestroy'])->name('admin.pesanan.destroy');
     Route::get('/pesanan/{id}/acc', [PesananController::class, 'adminAcc'])->name('admin.pesanan.acc');
 
+    // Set Pesanan Selesai dan Kurangi Saldo
+    // Route::post('/pesanan/{id}/selesai', [PesananController::class, 'setSelesaiDanKurangiSaldo'])->name('admin.pesanan.selesai');
+
     // CRUD layanan
     Route::resource('layanan', LayananController::class)->names('admin.layanan');
 
@@ -95,6 +99,13 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit'])->name('admin.transaksi.edit');
     Route::put('/transaksi/{id}', [TransaksiController::class, 'update'])->name('admin.transaksi.update');
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('admin.transaksi.destroy');
+
+    //DEPOSIT
+    Route::get('/deposit', [DepositController::class, 'adminindex'])->name('admin.deposit.index');
+    Route::post('/deposit/approve/{id}', [DepositController::class, 'adminApprove'])->name('admin.deposit.approve');
+    Route::post('/deposit/reject/{id}', [DepositController::class, 'adminReject'])->name('admin.deposit.reject');
+
+
 });
 
 // Route untuk owner
@@ -108,13 +119,17 @@ Route::prefix('user')->middleware(['auth', IsUser::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'UserDashboard'])->name('user.dashboard.index');
     Route::get('/pesanan', [DashboardController::class, 'userIndex'])->name('user.pesanan.index');
     Route::get('/pesanan/create', [PesananController::class, 'create'])->name('user.pesanan.create');
-    Route::post('/pesanan', [PesananController::class, 'store'])->name('user.pesanan.store');
+    Route::post('/pesanan', [PesananController::class, 'UserStore'])->name('user.pesanan.store');
     Route::get('/transaksi', [DashboardController::class, 'UserTransaksi'])->name('user.transaksi.index');
     // Route::get('/user/transaksi/{id}/edit-pembayaran', [PesananController::class, 'editPembayaran'])->name('user.transaksi.editPembayaran');
     // Route::put('/user/transaksi/{id}/update-pembayaran', [PesananController::class, 'updatePembayaran'])->name('user.transaksi.updatePembayaran');
     // Route::get('/user/transaksi', [DashboardController::class, 'userTransaksiIndex'])->name('user.transaksi.index');
     Route::get('transaksi/{id}/edit', [DashboardController::class, 'editPembayaran'])->name('user.transaksi.edit');
-    Route::post('transaksi/{id}', [DashboardController::class, 'updatePembayaran'])->name('user.transaksi.update');
+    Route::put('transaksi/{id}', [DashboardController::class, 'updatePembayaran'])->name('user.transaksi.update');
     Route::get('/transaksi', [DashboardController::class, 'userTransaksiIndex'])->name('user.transaksi.index');
+    Route::get('/deposit', [DepositController::class, 'index'])->name('user.deposit.index');
+    Route::get('/deposit/create', [DepositController::class, 'create'])->name('user.deposit.create');
+    Route::post('/deposit', [DepositController::class, 'store'])->name('user.deposit.store');
+   
 });
     // Route::get('/pelanggan', [PelangganController::class, 'index'])->name('user.pelanggan.index');

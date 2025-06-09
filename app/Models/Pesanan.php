@@ -34,14 +34,20 @@ class Pesanan extends Model
         return $this->belongsTo(KategoriPakaian::class, 'kategori_pakaian_id');
     }
 
-    public function layanan()
+    public function layanan()   
     {
         return $this->belongsTo(Layanan::class, 'layanan_id');
     }
     
     public function pelanggan()
-{
-    return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
-}
+    {
+        return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     
 }

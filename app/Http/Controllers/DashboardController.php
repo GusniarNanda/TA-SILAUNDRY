@@ -24,11 +24,11 @@ class DashboardController extends Controller
     public function UserDashboard()
     {
         $user = Auth::user();
-        $pesanan = Pesanan::where('user_id', $user->id)
-            ->with('layanan')
-            ->get();
-
-        return view('user.dashboard.index', compact('pesanan'));
+        // $pesanan = Pesanan::where('user_id', $user->id)
+            // ->with('layanan')
+            // ->get();
+        
+        return view('user.dashboard.index', compact('user'));
     }
 
     // Daftar pesanan user
@@ -65,8 +65,9 @@ class DashboardController extends Controller
     // Update bukti pembayaran
     public function updatePembayaran(Request $request, $id)
     {
+       
         $request->validate([
-            'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $pesanan = Pesanan::where('id', $id)
@@ -76,11 +77,11 @@ class DashboardController extends Controller
         if ($request->hasFile('bukti_pembayaran')) {
             $file = $request->file('bukti_pembayaran');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/bukti_pembayaran'), $filename);
+            $file->move(public_path('assets/images'), $filename);
 
             // Hapus file lama jika ada
-            if ($pesanan->bukti_pembayaran && file_exists(public_path('uploads/bukti_pembayaran/' . $pesanan->bukti_pembayaran))) {
-                unlink(public_path('uploads/bukti_pembayaran/' . $pesanan->bukti_pembayaran));
+            if ($pesanan->bukti_pembayaran && file_exists(public_path('assets/images/' . $pesanan->bukti_pembayaran))) {
+                unlink(public_path('assets/images/' . $pesanan->bukti_pembayaran));
             }
 
             $pesanan->bukti_pembayaran = $filename;

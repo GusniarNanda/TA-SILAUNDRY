@@ -130,10 +130,10 @@
                             @endauth
                         </div>
                     </div>
-                    @if (auth()->user()->role == 'admin')
-                        <nav class="mt-2">
-                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                                data-accordion="false">
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                            data-accordion="false">
+                            @if (auth()->user()->role == 'admin')
                                 {{-- dashboarad --}}
                                 <li class="nav-item">
                                     <a href="{{ route('admin.dashboard.index') }}" class="nav-link">
@@ -149,6 +149,7 @@
                                         <p>Pelanggan</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="{{ route('admin.layanan.index') }}" class="nav-link">
                                         <i class="fas fa-business-time"></i>
@@ -174,52 +175,57 @@
                                         <p>Data Transaksi</p>
                                     </a>
                                 </li>
-                    @endif
-                    <li class="nav-item">
-                        <a href="/" target="_blank" class="nav-link">
-                            <i class="nav-icon fas fa-link"></i>
-                            <p>Lihat Website</p>
-                        </a>
-                    </li>
-                    @if (auth()->check() && auth()->user()->role === 'owner')
-                        <li class="nav-item" style="list-style-type: none;">
-                            <a href="{{ route('owner.pelanggan.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Pelanggan</p>
-                            </a>
-                        </li>
-                    @endif
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.deposit.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-notes-medical"></i>
+                                        <p>Deposit Pelanggan</p>
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="nav-item">
+                                <a href="/" target="_blank" class="nav-link">
+                                    <i class="nav-icon fas fa-link"></i>
+                                    <p>Lihat Website</p>
+                                </a>
+                            </li>
+                            @if (auth()->check() && auth()->user()->role === 'owner')
+                                <li class="nav-item" style="list-style-type: none;">
+                                    <a href="{{ route('owner.pelanggan.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>Pelanggan</p>
+                                    </a>
+                                </li>
+                            @endif
 
-                    @if (auth()->check() && auth()->user()->role === 'user')
-                        <li class="nav-item">
-                            <a href="{{ route('user.dashboard.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
+                            @if (auth()->check() && auth()->user()->role === 'user')
+                                <li class="nav-item">
+                                    <a href="{{ route('user.dashboard.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
 
-                        <li class="nav-item">
-                            <a href="{{ route('user.pesanan.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>Pesanan Saya</p>
-                            </a>
-                        </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.pesanan.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <p>Pesanan Saya</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.deposit.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <p>Riwayat Deposit</p>
+                                    </a>
+                                </li>
+                            @endif
 
-                        <li class="nav-item">
-                            <a href="{{ route('user.transaksi.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>Bayar Pesanan</p>
-                            </a>
-                        </li>
-                    @endif
-
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link">
-                            <i class="nav-icon fas fa-arrow-left"></i>
-                            <p>Logout</p>
-                        </a>
-                    </li>
-                    </ul>
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-arrow-left"></i>
+                                    <p>Logout</p>
+                                </a>
+                            </li>
+                        </ul>
                     </nav>
                 </div>
             </aside>

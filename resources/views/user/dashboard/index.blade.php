@@ -1,78 +1,46 @@
 @extends('layouts.dashboard')
 
-@section('judul', 'Dashboard Pengguna')
-@section('subjudul', 'Pesanan Saya')
+@section('title', 'Dashboard User')
 
 @section('content')
     <div class="container mt-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Pesanan Saya</h4>
-            </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+        <h3 class="mb-4">Dashboard</h3>
 
-                <div class="text-end mb-3">
-                    <a href="{{ route('user.pesanan.create') }}" class="btn btn-success shadow-sm">
-                        <i class="fas fa-plus"></i> Pesan Sekarang
-                    </a>
+        <div class="row">
+            <!-- Card Total Pemasukan -->
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Saldo <a href="{{ route('user.deposit.create') }}"
+                                class="btn btn-sm btn-success">
+                                <i class="fa fa-plus"></i>
+                            </a></h5>
+                        <p class="card-text h4">Rp. {{ number_format($user->saldo, 0, ',', '.') }}</p>
+
+                    </div>
                 </div>
+            </div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
-                        <thead class="table-light text-center">
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>No HP</th>
-                                <th>Alamat</th>
-                                <th>Kategori Pakaian</th>
-                                <th>Jenis Layanan</th>
-                                <th>Waktu Jemput</th>
-                                <th>Status</th>
-                                <th>Catatan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($pesanan as $item)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $item->nama }}</td>
-                                    <td>{{ $item->no_hp }}</td>
-                                    <td>{{ $item->alamat }}</td>
-                                    <td>{{ $item->kategoriPakaian->nama_kategori ?? '-' }}</td>
-                                    <td>{{ $item->layanan->nama_layanan ?? '-' }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->waktu_jemput)->format('d M Y H:i') }}</td>
-                                    <td class="text-center">
-                                        @php
-                                            $status = strtolower($item->status);
-                                            if ($status == 'menunggu') {
-                                                $badgeClass = 'bg-warning text-dark';
-                                            } elseif ($status == 'lunas') {
-                                                $badgeClass = 'bg-primary';
-                                            } elseif ($status == 'batal') {
-                                                $badgeClass = 'bg-danger';
-                                            } else {
-                                                $badgeClass = 'bg-success';
-                                            }
-                                        @endphp
-                                        <span class="badge {{ $badgeClass }}">
-                                            {{ ucfirst($item->status) }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $item->catatan }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center text-muted">Belum ada pesanan.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            <!-- Contoh Card Tambahan -->
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Pesanan</h5>
+                        <p class="card-text h4">Rp. {{ number_format($user->totalPesanan, 0, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-info mb-3 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Jumlah Transaksi</h5>
+                        <p class="card-text h4">2</p>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Tambahan konten lain di sini -->
     </div>
 @endsection

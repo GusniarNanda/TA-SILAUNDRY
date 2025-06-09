@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('content')
     <div class="container">
@@ -31,7 +31,7 @@
                             <td>{{ $transaksi->status_pembayaran }}</td>
                             <td>
                                 @if ($transaksi->pesanan->bukti_pembayaran)
-                                    <a href="{{ asset('uploads/bukti_pembayaran/' . $transaksi->pesanan->bukti_pembayaran) }}"
+                                    <a href="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
                                         target="_blank">Lihat</a>
                                 @else
                                     Belum ada

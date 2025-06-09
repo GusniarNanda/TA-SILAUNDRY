@@ -81,21 +81,38 @@
             </div>
 
             <div class="form-group">
-                <label for="status">Status</label>
+                <label for="status">
+                    Status
+                    @php
+                        $badgeClass = match ($pesanan->status) {
+                            'Diterima' => 'bg-success',
+                            'Diproses' => 'bg-warning text-dark',
+                            'Diantar' => 'bg-info text-dark',
+                            'Selesai' => 'bg-secondary',
+                            default => 'bg-light text-dark',
+                        };
+                    @endphp
+                    <span class="badge {{ $badgeClass }}">{{ $pesanan->status }}</span>
+                </label>
+
                 <select id="status" name="status" class="form-control" required>
-                    <option value="Menunggu" {{ old('status', $pesanan->status) == 'Menunggu' ? 'selected' : '' }}>Menunggu
+                    <option value="Diterima" {{ old('status', $pesanan->status) == 'Diterima' ? 'selected' : '' }}>Diterima
                     </option>
                     <option value="Diproses" {{ old('status', $pesanan->status) == 'Diproses' ? 'selected' : '' }}>Diproses
                     </option>
+                    <option value="Diantar" {{ old('status', $pesanan->status) == 'Diantar' ? 'selected' : '' }}>Diantar
+                    </option>
                     <option value="Selesai" {{ old('status', $pesanan->status) == 'Selesai' ? 'selected' : '' }}>Selesai
                     </option>
-                    <option value="Dibatalkan" {{ old('status', $pesanan->status) == 'Dibatalkan' ? 'selected' : '' }}>
-                        Dibatalkan</option>
                 </select>
+
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+
+
 
             <div class="form-group">
                 <label for="catatan">Catatan</label>

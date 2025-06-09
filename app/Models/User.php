@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'saldo',
     ];
 
     /**
@@ -43,10 +44,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'saldo'=> 'integer',
+
     ];
 
     public function pesanan()
     {
         return $this->hasMany(Pesanan::class, 'user_id');
+    }
+
+    public function deposit()
+    {
+        return $this->hasMany(Deposit::class, 'user_id');
     }
 }

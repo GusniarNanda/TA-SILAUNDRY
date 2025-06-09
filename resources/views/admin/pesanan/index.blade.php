@@ -48,19 +48,16 @@
                                     <td>{{ $pesanan->waktu_jemput }}</td>
                                     <td class="text-center">
                                         @php
-                                            $status = strtolower($pesanan->status);
-                                            if ($status == 'menunggu') {
-                                                $badgeClass = 'bg-warning text-dark';
-                                            } elseif ($status == 'lunas') {
-                                                $badgeClass = 'bg-primary';
-                                            } elseif ($status == 'batal') {
-                                                $badgeClass = 'bg-danger';
-                                            } else {
-                                                $badgeClass = 'bg-success';
-                                            }
+                                            $badgeClass = match ($pesanan->status) {
+                                                'Diterima' => 'bg-success',
+                                                'Diproses' => 'bg-warning text-dark',
+                                                'Diantar' => 'bg-info text-dark',
+                                                'Selesai' => 'bg-secondary',
+                                                default => 'bg-light text-dark',
+                                            };
                                         @endphp
                                         <span class="badge {{ $badgeClass }}">
-                                            {{ ucfirst($pesanan->status) }}
+                                            {{ $pesanan->status }}
                                         </span>
                                     </td>
                                     <td>{{ $pesanan->catatan }}</td>
