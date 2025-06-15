@@ -14,11 +14,11 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <div class="text-end mb-3">
+                {{-- <div class="text-end mb-3">
                     <a href="{{ route('admin.pesanan.create') }}" class="btn btn-success shadow-sm">
                         <i class="fas fa-plus"></i> Tambah Pesanan
                     </a>
-                </div>
+                </div> --}}
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
@@ -30,7 +30,9 @@
                                 <th>Alamat</th>
                                 <th>Kategori Pakaian</th>
                                 <th>Jenis Layanan</th>
+                                <th>Opsi Antar Jemput</th>
                                 <th>Waktu Jemput</th>
+                                <th>Waktu Antar</th>
                                 <th>Status</th>
                                 <th>Catatan</th>
                                 <th>Aksi</th>
@@ -45,7 +47,10 @@
                                     <td>{{ $pesanan->alamat }}</td>
                                     <td>{{ $pesanan->kategoriPakaian->nama_kategori ?? '-' }}</td>
                                     <td>{{ $pesanan->layanan->nama_layanan ?? '-' }}</td>
-                                    <td>{{ $pesanan->waktu_jemput }}</td>
+                                    <td>{{ $pesanan->opsi_antar_jemput ?? '-' }}</td>
+                                    <td>{{ $pesanan->waktu_jemput ?? '-' }}</td>
+                                    <td>{{ $pesanan->waktu_antar ?? '-' }}</td>
+
                                     <td class="text-center">
                                         @php
                                             $badgeClass = match ($pesanan->status) {

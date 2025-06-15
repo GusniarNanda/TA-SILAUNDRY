@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pesanan_id');
             $table->decimal('berat', 8, 2)->nullable(); // Tambahan kolom berat
-            $table->decimal('total_bayar', 12, 2);
+            $table->decimal('total_bayar', 10, 2);
             $table->dateTime('tanggal_bayar');
             $table->string('status_pembayaran')->default('Belum Lunas');
             $table->timestamps();

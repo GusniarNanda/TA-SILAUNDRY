@@ -27,9 +27,9 @@
                                 <th>No</th>
                                 <th>Metode Pembayaran</th>
                                 <th>Nominal</th>
-                                <th>Bukti Transfer</th>
                                 <th>Status</th>
                                 <th>Tanggal</th>
+                                <th>Bukti Transfer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,16 +38,24 @@
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $deposit->metode_pembayaran }}</td>
                                     <td class="text-end">
-                                        Rp
-                                        {{ number_format($deposit->nominal ?? 0, 0, ',', '.') }}
+                                        Rp {{ number_format($deposit->nominal ?? 0, 0, ',', '.') }}
                                     </td>
-                                    <td>{{ $deposit->status }}</td>
+                                    <td class="text-center">
+                                        @if ($deposit->status === 'Menunggu Konfirmasi')
+                                            <span class="badge bg-warning text-dark">Menunggu Konfirmasi</span>
+                                        @elseif ($deposit->status === 'Diterima')
+                                            <span class="badge bg-secondary">Diterima</span>
+                                        @elseif ($deposit->status === 'Ditolak')
+                                            <span class="badge bg-danger">Ditolak</span><br>
+                                            <small class="text-muted">Alasan: {{ $deposit->alasan_penolakan }}</small>
+                                        @else
+                                            <span class="badge bg-success">{{ $deposit->status }}</span>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($deposit->created_at)->format('d-m-Y H:i') }}
                                     </td>
-
                                     <td class="text-center">
-
                                         <a href="{{ asset('assets/images/' . $deposit->bukti) }}" target="_blank">
                                             <img src="{{ asset('assets/images/' . $deposit->bukti) }}" alt="Bukti"
                                                 width="80" class="img-thumbnail">

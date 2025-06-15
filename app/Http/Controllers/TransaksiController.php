@@ -19,25 +19,21 @@ class TransaksiController extends Controller
 
     public function create(Request $request)
     {
-        // Dapatkan daftar pesanan, gunakan variabel $pesanans (plural)
         $pesanans = Pesanan::with(['layanan', 'kategoriPakaian'])->get();
-
         $totalBayar = null;
+        $pesananTerpilih = null;
+        $berat = $request->berat;
 
-        if ($request->has('pesanan_id') && $request->has('berat')) {
-            $pesanan = Pesanan::with(['layanan', 'kategoriPakaian'])->find($request->pesanan_id);
-            if ($pesanan) {
-                $hargaLayanan = $pesanan->layanan->harga_layanan ?? 0;
-                $hargaKategori = $pesanan->kategoriPakaian->harga_kategori ?? 0;
-                $berat = (float) $request->berat;
-
-                $totalBayar = ($berat * $hargaKategori) + $hargaLayanan;
+        if ($request->filled(['pesanan_id', 'berat'])) {
+            $pesananTerpilih = Pesanan::with(['layanan', 'kategoriPakaian'])->find($request->pesanan_id);
+            if ($pesananTerpilih) {
+                $hargaLayanan = $pesananTerpilih->layanan->harga_layanan ?? 0;
+                $hargaKategori = $pesananTerpilih->kategoriPakaian->harga_kategori ?? 0;
+                $totalBayar = ($hargaLayanan + $hargaKategori) * (float) $berat;
             }
         }
 
-        return view('admin.transaksi.create', compact('pesanans', 'totalBayar'))
-               ->with('pesanan_id', $request->pesanan_id)
-               ->with('berat', $request->berat);
+        return view('admin.transaksi.create', compact('pesanans', 'totalBayar', 'pesananTerpilih', 'berat'));
     }
 
     public function store(Request $request)
@@ -53,11 +49,11 @@ class TransaksiController extends Controller
 
         $hargaLayanan = $pesanan->layanan->harga_layanan ?? 0;
         $hargaKategori = $pesanan->kategoriPakaian->harga_kategori ?? 0;
-
         $totalBayar = ($request->berat * $hargaKategori) + $hargaLayanan;
 
         Transaksi::create([
             'pesanan_id' => $request->pesanan_id,
+            'user_id' => $pesanan->user_id,
             'berat' => $request->berat,
             'total_bayar' => $totalBayar,
             'tanggal_bayar' => $request->tanggal_bayar,
@@ -70,10 +66,7 @@ class TransaksiController extends Controller
     public function edit($id, Request $request)
     {
         $transaksi = Transaksi::with(['pesanan.layanan', 'pesanan.kategoriPakaian'])->findOrFail($id);
-
-        // Gunakan $pesanans plural untuk daftar pesanan
         $pesanans = Pesanan::with(['layanan', 'kategoriPakaian'])->get();
-
         $totalBayar = null;
 
         if ($request->has('pesanan_id') && $request->has('berat')) {
@@ -82,14 +75,12 @@ class TransaksiController extends Controller
                 $hargaLayanan = $pesanan->layanan->harga_layanan ?? 0;
                 $hargaKategori = $pesanan->kategoriPakaian->harga_kategori ?? 0;
                 $berat = (float) $request->berat;
-
                 $totalBayar = ($berat * $hargaKategori) + $hargaLayanan;
             }
         } else {
             $hargaLayanan = $transaksi->pesanan->layanan->harga_layanan ?? 0;
             $hargaKategori = $transaksi->pesanan->kategoriPakaian->harga_kategori ?? 0;
             $berat = $transaksi->berat;
-
             $totalBayar = ($berat * $hargaKategori) + $hargaLayanan;
         }
 
@@ -110,11 +101,11 @@ class TransaksiController extends Controller
 
         $hargaLayanan = $pesanan->layanan->harga_layanan ?? 0;
         $hargaKategori = $pesanan->kategoriPakaian->harga_kategori ?? 0;
-
         $totalBayar = ($request->berat * $hargaKategori) + $hargaLayanan;
 
         $transaksi->update([
             'pesanan_id' => $request->pesanan_id,
+            'user_id' => $pesanan->user_id,
             'berat' => $request->berat,
             'total_bayar' => $totalBayar,
             'tanggal_bayar' => $request->tanggal_bayar,

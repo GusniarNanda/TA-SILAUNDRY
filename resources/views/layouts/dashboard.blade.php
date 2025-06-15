@@ -252,6 +252,8 @@
         <script src="{{ asset('lte/plugins/daterangepicker/daterangepicker.js') }}"></script>
         <script src="{{ asset('lte/plugins/summernote/summernote-bs4.min.js') }}"></script>
         <script src="{{ asset('lte/dist/js/adminlte.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
         @stack('js')
     </body>

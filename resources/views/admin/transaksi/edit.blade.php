@@ -64,7 +64,7 @@
                     value="{{ old('tanggal_bayar', \Carbon\Carbon::parse($transaksi->tanggal_bayar)->format('Y-m-d\TH:i')) }}"
                     required>
             </div>
-
+{{-- 
             <div class="mb-3">
                 <label for="status_pembayaran" class="form-label">Status Pembayaran</label>
                 <select name="status_pembayaran" id="status_pembayaran" class="form-select" required>
@@ -75,7 +75,7 @@
                         {{ old('status_pembayaran', $transaksi->status_pembayaran) == 'Lunas' ? 'selected' : '' }}>Lunas
                     </option>
                 </select>
-            </div>
+            </div> --}}
 
             <button type="submit" class="btn btn-success">Update</button>
             <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Kembali</a>

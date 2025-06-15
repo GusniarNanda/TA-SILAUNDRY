@@ -20,9 +20,12 @@ class Pesanan extends Model
         'kategori_pakaian_id',  // ini foreign key
         'layanan_id',           // ini foreign key
         'waktu_jemput',
+        'waktu_antar',
+        'opsi_antar_jemput',
         'status',
         'catatan',
         'user_id',
+        'berat',
     ];
 
     // Pastikan import model relasi di atas file ini:

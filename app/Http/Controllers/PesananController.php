@@ -14,34 +14,40 @@ use Illuminate\Support\Facades\DB;
 class PesananController extends Controller
 {
     // Menampilkan form pesanan untuk user
-    public function create()
+    public function create(Request $request)
     { 
         $kategoriPakaians = KategoriPakaian::all();
         $layanans = Layanan::all();
-        
-        return view('user.pesanan.create', compact('kategoriPakaians', 'layanans'));
+        $opsi_antar_jemput = $request->get('opsi_antar_jemput');
+        return view('user.pesanan.create', compact('kategoriPakaians', 'layanans', 'opsi_antar_jemput'));
     }
 
     // Menyimpan data pesanan dari user
     public function UserStore(Request $request)
     {
+        
         $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
-            'kategori_pakaian_id' => 'required|integer|exists:kategori_pakaians,id',
-            'layanan_id' => 'required|integer|exists:layanan,id',
+            'kategori_pakaian_id' => 'required',
+            'layanan_id' => 'required',
             'waktu_jemput' => 'required|date',
-            'catatan' => 'nullable|string',
+            'waktu_antar' => 'required|date',
+            'opsi_antar_jemput' => 'required',
+            'catatan' => 'required|string',
         ]);
+        
     
         Pesanan::create([
             'nama' => $request->nama,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
+            'opsi_antar_jemput' => $request->opsi_antar_jemput,
             'kategori_pakaian_id' => $request->kategori_pakaian_id,
             'layanan_id' => $request->layanan_id,
             'waktu_jemput' => $request->waktu_jemput,
+            'waktu_antar' => $request->waktu_antar,
             'status' => 'Menunggu', // status default
             'catatan' => $request->catatan,
             'user_id'=> Auth::id(),
@@ -164,25 +170,13 @@ class PesananController extends Controller
             'waktu_jemput' => 'required|date',
             'catatan' => 'nullable|string',
             'status' => 'required|string',
+            'berat' => 'required|numeric|min:0.1',
         ]);
-
+    
         $pesanan = Pesanan::with(['user', 'layanan', 'kategoriPakaian'])->findOrFail($id);
-
-        $statusSebelumnya = $pesanan->status;
-        $statusBaru = $request->status;
-
-        if ($statusSebelumnya !== 'Selesai' && $statusBaru === 'Selesai') {
-            $totalHarga = $pesanan->layanan->harga + $pesanan->kategoriPakaian->harga;
-            $user = $pesanan->user;
-
-            if ($user->saldo < $totalHarga) {
-                return redirect()->back()->with('error', 'Saldo user tidak cukup untuk menyelesaikan pesanan.');
-            }
-
-            $user->saldo -= $totalHarga;
-            $user->save();
-        }
-
+        $user = $pesanan->user;
+    
+        // Simpan data pesanan terlebih dahulu
         $pesanan->update([
             'nama' => $request->nama,
             'no_hp' => $request->no_hp,
@@ -191,11 +185,50 @@ class PesananController extends Controller
             'layanan_id' => $request->layanan_id,
             'waktu_jemput' => $request->waktu_jemput,
             'catatan' => $request->catatan,
-            'status' => $statusBaru,
+            'berat' => $request->berat,
+            'status' => $request->status,
         ]);
-
-        return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil diperbarui!');
+    
+        // Refresh relasi agar update layanan dan kategori pakaian terambil dengan benar
+        $pesanan->refresh();
+    
+        // Hitung total bayar
+        $hargaLayanan = $pesanan->layanan->harga;
+        $hargaKategori = $pesanan->kategoriPakaian->harga;
+        $berat = $pesanan->berat;
+        $totalBayar = ($hargaLayanan + $hargaKategori) * $berat;
+    
+        // Cek jika status update menjadi 'Selesai' dan belum ada transaksi
+        if ($request->status === 'Selesai') {
+            $existing = Transaksi::where('pesanan_id', $pesanan->id)->first();
+            if (!$existing) {
+                // Cek saldo user
+                if ($user->saldo < $totalBayar) {
+                    return back()->with('error', 'Saldo user tidak mencukupi!');
+                }
+    
+                // Kurangi saldo user
+                $user->saldo -= $totalBayar;
+                $user->save();
+    
+                // Simpan transaksi
+                Transaksi::create([
+                    'pesanan_id' => $pesanan->id,
+                    'user_id' => $user->id,
+                    'berat' => $berat,
+                    'harga_layanan' => $hargaLayanan,
+                    'harga_kategori' => $hargaKategori,
+                    'total_bayar' => $totalBayar,
+                    'tanggal_bayar' => now(),
+                    'status_pembayaran' => 'Lunas',
+                ]);
+            }
+        }
+    
+        return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
     }
+    
+
 
     // Simpan pesanan dari admin
     public function adminStore(Request $request)
@@ -207,6 +240,7 @@ class PesananController extends Controller
             'kategori_pakaian_id' => 'required|exists:kategori_pakaians,id',
             'layanan_id' => 'required|exists:layanan,id',
             'waktu_jemput' => 'required|date',
+            'opsi_antar_jemput' => 'required|in:antar,jemput,keduanya',
             'catatan' => 'nullable|string',
         ]);
 
@@ -214,6 +248,7 @@ class PesananController extends Controller
             'nama' => $request->nama,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
+            'opsi_antar_jemput' => $request->opsi_antar_jemput,
             'kategori_pakaian_id' => $request->kategori_pakaian_id,
             'layanan_id' => $request->layanan_id,
             'waktu_jemput' => $request->waktu_jemput,
@@ -235,25 +270,56 @@ class PesananController extends Controller
 
     // Acc pesanan dan buat transaksi baru
     public function adminAcc($id)
-    {
-        $pesanan = Pesanan::findOrFail($id);
+{
+    $pesanan = Pesanan::with(['user', 'layanan', 'kategoriPakaian'])->findOrFail($id);
+    $user = $pesanan->user;
 
-        $existingTransaksi = Transaksi::where('pesanan_id', $pesanan->id)->first();
-        if ($existingTransaksi) {
-            return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan sudah pernah di-Acc.');
-        }
-
-        Transaksi::create([
-            'pesanan_id' => $pesanan->id,
-            'berat' => 0,
-            'total_bayar' => 0,
-            'tanggal_bayar' => Carbon::now(),
-            'status_pembayaran' => 'Belum Lunas',
-        ]);
-
-        $pesanan->status = 'Diterima';
-        $pesanan->save();
-
-        return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil di-Acc.');
+    // Cek apakah transaksi sudah dibuat
+    $existing = Transaksi::where('pesanan_id', $pesanan->id)->first();
+    if ($existing) {
+        return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan sudah pernah di-Acc.');
     }
+
+    $hargaLayanan = $pesanan->layanan->harga_layanan;
+    $hargaKategori = $pesanan->kategoriPakaian->harga_kategori;
+    $berat = $pesanan->berat;
+
+    // Cek apakah berat sudah diisi
+    if (is_null($berat) || $berat <= 0) {
+        return redirect()->route('admin.pesanan.edit', $id)
+            ->with('error', 'Berat cucian belum diisi. Silakan edit pesanan terlebih dahulu.');
+    }
+
+    $totalBayar = ($hargaLayanan + $hargaKategori) * $berat;
+
+    // Cek saldo
+    if ($user->saldo < $totalBayar) {
+        return redirect()->route('admin.pesanan.index')->with('error', 'Saldo user tidak mencukupi!');
+    }
+
+    // Kurangi saldo
+    $user->saldo -= $totalBayar;
+    $user->save();
+
+    // Ubah status ke selesai
+    $pesanan->status = 'Diterima';
+    $pesanan->save();
+
+    // Buat transaksi
+    Transaksi::create([
+        'pesanan_id' => $pesanan->id,
+        'user_id' => $user->id,
+        'berat' => $berat,
+        'harga_layanan' => $hargaLayanan,
+        'harga_kategori' => $hargaKategori,
+        'total_bayar' => $totalBayar,
+        'tanggal_bayar' => now(),
+        'status_pembayaran' => 'Lunas',
+    ]);
+
+    return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil di-Acc dan transaksi dicatat.');
+}
+
+    
+
 }

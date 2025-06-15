@@ -14,11 +14,11 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <div class="text-end mb-3">
+                {{-- <div class="text-end mb-3">
                     <a href="{{ route('admin.transaksi.create') }}" class="btn btn-success shadow-sm">
                         <i class="fas fa-plus"></i> Tambah Transaksi
                     </a>
-                </div>
+                </div> --}}
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
@@ -32,8 +32,8 @@
                                 <th>Total Bayar</th>
                                 <th>Tanggal Bayar</th>
                                 <th>Status Pembayaran</th>
-                                <th>Bukti Pembayaran</th>
-                                <th>Aksi</th>
+                                {{-- <th>Bukti Pembayaran</th> --}}
+                                {{-- <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +62,7 @@
                                             {{ $transaksi->status_pembayaran }}
                                         </span>
                                     </td>
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         @if ($transaksi->pesanan->bukti_pembayaran)
                                             <a href="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
                                                 target="_blank">
@@ -72,8 +72,8 @@
                                         @else
                                             <span class="text-muted">Belum diupload</span>
                                         @endif
-                                    </td>
-                                    <td class="text-center">
+                                    </td> --}}
+                                    {{-- <td class="text-center">
                                         <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}"
                                             class="btn btn-sm btn-warning" title="Edit">
                                             <i class="fas fa-edit"></i>
@@ -88,7 +88,7 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>

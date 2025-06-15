@@ -133,11 +133,19 @@ class DepositController extends Controller
         return redirect()->route('admin.deposit.index')->with('success', 'Deposit berhasil disetujui.');
     }
 
-    public function adminReject(string $id)
-    {
-        $deposit = Deposit::find($id);
-        $deposit->status = 'Menunggu';
-        $deposit->save();
-        return redirect()->route('admin.deposit.index')->with('success', 'Deposit berhasil ditolak.');
-    }
+    public function adminReject(Request $request, $id)
+{
+    $request->validate([
+        'alasan' => 'required|string|max:1000',
+    ]);
+
+    $deposit = Deposit::findOrFail($id);
+    $deposit->status = 'Ditolak';
+    $deposit->alasan_penolakan = $request->alasan;
+    $deposit->save();
+
+    return redirect()->route('admin.deposit.index')->with('success', 'Deposit ditolak dengan alasan.');
+}
+
+    
 }

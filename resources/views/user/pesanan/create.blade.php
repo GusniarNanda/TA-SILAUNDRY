@@ -8,83 +8,101 @@
             <div class="card-header">
                 <h3>Form Pemesanan Laundry</h3>
             </div>
+
             <form action="{{ route('user.pesanan.store') }}" method="POST">
                 @csrf
                 <div class="card-body">
-
                     <!-- Nama -->
                     <div class="form-group mb-3">
                         <label for="nama">Nama</label>
                         <input type="text" id="nama" name="nama" class="form-control"
                             value="{{ auth()->user()->name }}" readonly>
-                        @error('nama')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
                     </div>
 
-                    <!-- Nomor HP -->
+                    <!-- No HP -->
                     <div class="form-group mb-3">
                         <label for="no_hp">Nomor HP</label>
-                        <input type="text" id="no_hp" name="no_hp" class="form-control"
-                            placeholder="Masukkan Nomor HP" required>
-                        @error('no_hp')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <input type="text" name="no_hp" class="form-control" value="{{ old('no_hp') }}" required>
                     </div>
 
                     <!-- Alamat -->
                     <div class="form-group mb-3">
                         <label for="alamat">Alamat</label>
-                        <textarea id="alamat" name="alamat" class="form-control" placeholder="Masukkan Alamat" required></textarea>
-                        @error('alamat')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <textarea name="alamat" class="form-control" required>{{ old('alamat') }}</textarea>
                     </div>
 
-                    <!-- Kategori Pakaian -->
+                    <!-- Kategori -->
                     <div class="form-group mb-3">
-                        <label for="kategori_pakaian_id">Pilih Kategori</label>
-                        <select id="kategori_pakaian_id" name="kategori_pakaian_id" class="form-select" required>
-                            <option value="" selected disabled>-- Pilih Kategori --</option>
+                        <label for="kategori_pakaian_id">Kategori Pakaian</label>
+                        <select name="kategori_pakaian_id" class="form-control" required>
+                            <option value="" disabled {{ old('kategori_pakaian_id') ? '' : 'selected' }}>Pilih
+                                Kategori</option>
                             @foreach ($kategoriPakaians as $kategori)
-                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                                <option value="{{ $kategori->id }}"
+                                    {{ old('kategori_pakaian_id') == $kategori->id ? 'selected' : '' }}>
+                                    {{ $kategori->nama_kategori }}
+                                </option>
                             @endforeach
                         </select>
-                        @error('kategori_pakaian_id')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
                     </div>
 
-                    <!-- Jenis Layanan -->
+                    <!-- Layanan -->
                     <div class="form-group mb-3">
-                        <label for="layanan_id">Pilih Layanan</label>
-                        <select id="layanan_id" name="layanan_id" class="form-select" required>
-                            <option value="" selected disabled>-- Pilih Layanan --</option>
+                        <label for="layanan_id">Jenis Layanan</label>
+                        <select name="layanan_id" class="form-control" required>
+                            <option value="" disabled {{ old('layanan_id') ? '' : 'selected' }}>Pilih Layanan</option>
                             @foreach ($layanans as $layanan)
-                                <option value="{{ $layanan->id }}">{{ $layanan->nama_layanan }}</option>
+                                <option value="{{ $layanan->id }}"
+                                    {{ old('layanan_id') == $layanan->id ? 'selected' : '' }}>
+                                    {{ $layanan->nama_layanan }}
+                                </option>
                             @endforeach
                         </select>
-                        @error('layanan_id')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
                     </div>
 
-                    <!-- Waktu Jemput -->
+                    <!-- Opsi Antar Jemput -->
                     <div class="form-group mb-3">
-                        <label for="waktu_jemput">Waktu Jemput</label>
-                        <input type="datetime-local" id="waktu_jemput" name="waktu_jemput" class="form-control" required>
-                        @error('waktu_jemput')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <label for="opsi_antar_jemput">Opsi Antar Jemput</label>
+                        <select name="opsi_antar_jemput" class="form-control" onchange="this.form.submit()">
+                            <option value=""
+                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == null ? 'selected' : '' }}>--
+                                Pilih Layanan --</option>
+                            <option value="Antar Saja"
+                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Antar Saja' ? 'selected' : '' }}>
+                                Antar saja</option>
+                            <option value="Jemput Saja"
+                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Jemput Saja' ? 'selected' : '' }}>
+                                Jemput saja</option>
+                            <option value="Antar dan Jemput"
+                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Antar dan Jemput' ? 'selected' : '' }}>
+                                Antar dan Jemput</option>
+                        </select>
                     </div>
+
+                    @php
+                        $opsi = old('opsi_antar_jemput', request('opsi_antar_jemput'));
+                    @endphp
+
+                    @if ($opsi == 'Antar Saja' || $opsi == 'Antar dan Jemput')
+                        <div class="form-group mb-3">
+                            <label for="waktu_antar">Waktu Antar</label>
+                            <input type="datetime-local" name="waktu_antar" class="form-control"
+                                value="{{ old('waktu_antar') }}">
+                        </div>
+                    @endif
+
+                    @if ($opsi == 'Jemput Saja' || $opsi == 'Antar dan Jemput')
+                        <div class="form-group mb-3">
+                            <label for="waktu_jemput">Waktu Jemput</label>
+                            <input type="datetime-local" name="waktu_jemput" class="form-control"
+                                value="{{ old('waktu_jemput') }}">
+                        </div>
+                    @endif
 
                     <!-- Catatan -->
                     <div class="form-group mb-3">
-                        <label for="catatan">Catatan Tambahan</label>
-                        <textarea id="catatan" name="catatan" class="form-control" placeholder="Masukkan Catatan"></textarea>
-                        @error('catatan')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <label for="catatan">Catatan</label>
+                        <textarea name="catatan" class="form-control">{{ old('catatan') }}</textarea>
                     </div>
                 </div>
 

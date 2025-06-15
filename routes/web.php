@@ -60,7 +60,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::put('/pesanan/{id}', [PesananController::class, 'adminUpdate'])->name('admin.pesanan.update');
     Route::delete('/pesanan/{id}', [PesananController::class, 'adminDestroy'])->name('admin.pesanan.destroy');
     Route::get('/pesanan/{id}/acc', [PesananController::class, 'adminAcc'])->name('admin.pesanan.acc');
-
+    
     // Set Pesanan Selesai dan Kurangi Saldo
     // Route::post('/pesanan/{id}/selesai', [PesananController::class, 'setSelesaiDanKurangiSaldo'])->name('admin.pesanan.selesai');
 
@@ -104,6 +104,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::get('/deposit', [DepositController::class, 'adminindex'])->name('admin.deposit.index');
     Route::post('/deposit/approve/{id}', [DepositController::class, 'adminApprove'])->name('admin.deposit.approve');
     Route::post('/deposit/reject/{id}', [DepositController::class, 'adminReject'])->name('admin.deposit.reject');
+    Route::get('/deposit/create', [DepositController::class, 'create'])->name('admin.deposit.create');
 
 
 });
@@ -118,8 +119,8 @@ Route::prefix('owner')->middleware(['auth', IsOwner::class])->group(function () 
 Route::prefix('user')->middleware(['auth', IsUser::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'UserDashboard'])->name('user.dashboard.index');
     Route::get('/pesanan', [DashboardController::class, 'userIndex'])->name('user.pesanan.index');
-    Route::get('/pesanan/create', [PesananController::class, 'create'])->name('user.pesanan.create');
     Route::post('/pesanan', [PesananController::class, 'UserStore'])->name('user.pesanan.store');
+    Route::get('/pesanan/create', [PesananController::class, 'create'])->name('user.pesanan.create');
     Route::get('/transaksi', [DashboardController::class, 'UserTransaksi'])->name('user.transaksi.index');
     // Route::get('/user/transaksi/{id}/edit-pembayaran', [PesananController::class, 'editPembayaran'])->name('user.transaksi.editPembayaran');
     // Route::put('/user/transaksi/{id}/update-pembayaran', [PesananController::class, 'updatePembayaran'])->name('user.transaksi.updatePembayaran');
