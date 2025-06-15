@@ -7,9 +7,9 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About SiLaundry
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+SiLaundry adalah sistem informasi berbasis website yang bertujuan untuk mempermudah dari pelanggan, karyawan, dan pemilik dalam hal pemesanan dan pengelolaan laundry itu sendiri, didalamnya terdapat banyak fitur seperti pick up laundry, top up saldo, dan sampai ke kelola data pelanggan.
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
