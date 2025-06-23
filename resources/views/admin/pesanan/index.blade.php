@@ -42,9 +42,9 @@
                             @foreach ($pesanans as $pesanan)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $pesanan->nama }}</td>
-                                    <td>{{ $pesanan->no_hp }}</td>
-                                    <td>{{ $pesanan->alamat }}</td>
+                                    <td>{{ $pesanan->user->name }}</td>
+                                    <td>{{ $pesanan->user->no_telepon }}</td>
+                                    <td>{{ $pesanan->user->alamat }}</td>
                                     <td>{{ $pesanan->kategoriPakaian->nama_kategori ?? '-' }}</td>
                                     <td>{{ $pesanan->layanan->nama_layanan ?? '-' }}</td>
                                     <td>{{ $pesanan->opsi_antar_jemput ?? '-' }}</td>

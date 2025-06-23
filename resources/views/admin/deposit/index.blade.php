@@ -14,12 +14,6 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <div class="text-end mb-3">
-                    <a href="{{ route('user.deposit.create') }}" class="btn btn-success shadow-sm">
-                        <i class="fas fa-plus"></i> Tambah Transaksi
-                    </a>
-                </div>
-
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
                         <thead class="table-light text-center">
@@ -38,9 +32,7 @@
                             @forelse ($deposits as $deposit)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td class="text-center">
-                                        {{ optional($deposit->user)->name ?? '-' }}
-                                    </td>
+                                    <td class="text-center">{{ optional($deposit->user)->name ?? '-' }}</td>
                                     <td>{{ $deposit->metode_pembayaran }}</td>
                                     <td class="text-end">
                                         Rp {{ number_format($deposit->nominal ?? 0, 0, ',', '.') }}
@@ -62,21 +54,20 @@
                                             <span class="badge bg-success">Diterima</span>
                                         @elseif ($deposit->status === 'Ditolak')
                                             <span class="badge bg-danger">Ditolak</span>
-                                            @if ($deposit->alasan_penolakan)
-                                                <div class="mt-1">
-                                                    <small class="text-muted fst-italic">Alasan:
-                                                        {{ $deposit->alasan_penolakan }}</small>
-                                                </div>
-                                            @endif
+                                            <div class="mt-1">
+                                                <small class="text-muted fst-italic">
+                                                    Alasan:
+                                                    {{ !empty($deposit->alasan_penolakan)
+                                                        ? $deposit->alasan_penolakan
+                                                        : 'Otomatis ditolak karena melewati batas waktu pembayaran.' }}
+                                                </small>
+                                            </div>
                                         @endif
                                     </td>
-                                    <td class="text-center">
-                                        {{ $deposit->created_at->format('d-m-Y H:i') }}
-                                    </td>
+                                    <td class="text-center">{{ $deposit->created_at->format('d-m-Y H:i') }}</td>
                                     <td>
                                         <div class="d-flex flex-column" style="gap: 6px;">
                                             @if ($deposit->status === 'Menunggu')
-                                                {{-- Tombol Approve --}}
                                                 <form action="{{ route('admin.deposit.approve', $deposit->id) }}"
                                                     method="POST">
                                                     @csrf
@@ -86,7 +77,6 @@
                                                     </button>
                                                 </form>
 
-                                                {{-- Tombol Buka Modal Tolak --}}
                                                 <button type="button"
                                                     class="btn btn-danger btn-sm text-white shadow-sm px-3 py-2"
                                                     data-bs-toggle="modal"
@@ -140,7 +130,6 @@
                                                 </form>
                                             </div>
                                         </div>
-
                                     </td>
                                 </tr>
                             @empty

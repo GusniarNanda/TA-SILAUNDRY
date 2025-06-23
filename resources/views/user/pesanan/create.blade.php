@@ -21,14 +21,14 @@
 
                     <!-- No HP -->
                     <div class="form-group mb-3">
-                        <label for="no_hp">Nomor HP</label>
-                        <input type="text" name="no_hp" class="form-control" value="{{ old('no_hp') }}" required>
+                        <label for="no_telepon">Nomor HP</label>
+                        <textarea name="no_telepon" class="form-control" readonly>{{ old('no_telepon', Auth::user()->no_telepon) }}</textarea>
                     </div>
 
                     <!-- Alamat -->
                     <div class="form-group mb-3">
                         <label for="alamat">Alamat</label>
-                        <textarea name="alamat" class="form-control" required>{{ old('alamat') }}</textarea>
+                        <textarea name="alamat" class="form-control" readonly>{{ old('alamat', Auth::user()->alamat) }}</textarea>
                     </div>
 
                     <!-- Kategori -->

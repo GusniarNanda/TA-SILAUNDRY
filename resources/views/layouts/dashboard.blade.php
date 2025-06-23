@@ -131,13 +131,32 @@
                         </div>
                     </div>
                     <nav class="mt-2">
+                        @php
+                            use App\Models\Pesanan;
+                            $pesananBaruCount = \App\Models\Pesanan::where('status', 'menunggu')->count(); // ganti status sesuai sistem kamu
+                            $depositBaruCount = \App\Models\Deposit::where('status', 'menunggu')->count(); // ganti status sesuai sistem kamu
+                        @endphp
+
+                        <style>
+                            .dot-notif {
+                                height: 10px;
+                                width: 10px;
+                                background-color: red;
+                                border-radius: 50%;
+                                display: inline-block;
+                                margin-left: 5px;
+                                margin-top: -10px;
+                                position: absolute;
+                            }
+                        </style>
+
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             @if (auth()->user()->role == 'admin')
                                 {{-- dashboarad --}}
                                 <li class="nav-item">
                                     <a href="{{ route('admin.dashboard.index') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <i class="nav-icon fas fa-home"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
@@ -152,7 +171,7 @@
 
                                 <li class="nav-item">
                                     <a href="{{ route('admin.layanan.index') }}" class="nav-link">
-                                        <i class="fas fa-business-time"></i>
+                                        <i class="nav-icon fas fa-business-time"></i>
                                         <p>Layanan Laundry</p>
                                     </a>
                                 </li>
@@ -163,25 +182,49 @@
                                     </a>
                                 </li>
                                 {{-- data pesanan --}}
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.pesanan.index') }}" class="nav-link">
+                                <li class="nav-item position-relative">
+                                    <a href="{{ route('admin.pesanan.index') }}" class="nav-link position-relative">
                                         <i class="nav-icon fas fa-clipboard-list"></i>
-                                        <p>Data Pesanan Laundry</p>
+                                        <span class="ml-0">Data Pesanan Laundry</span>
+                                        @if ($pesananBaruCount > 0)
+                                            <span
+                                                class="position-absolute top-30 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {{ $pesananBaruCount }}
+                                                <span class="visually-hidden">pesanan baru</span>
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="{{ route('admin.transaksi.index') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-clipboard-list"></i>
+                                        <i class="nav-icon fas fa-money-bill-wave"></i>
                                         <p>Data Transaksi</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.deposit.index') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-notes-medical"></i>
-                                        <p>Deposit Pelanggan</p>
+                                    <a href="{{ route('admin.chat.userlist') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-money-bill-wave"></i>
+                                        <p>Chat</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item postion-relative">
+                                    <a href="{{ route('admin.deposit.index') }}" class="nav-link postion-relative">
+                                        <i class="nav-icon fas fa-credit-card"></i>
+                                        <span class="ml-1">Deposit Pelanggan</span>
+                                        @if ($depositBaruCount > 0)
+                                            <span
+                                                class="position-absolute top-30 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {{ $depositBaruCount }}
+                                                <span class="visually-hidden">deposit baru</span>
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
                             @endif
+
                             <li class="nav-item">
                                 <a href="/" target="_blank" class="nav-link">
                                     <i class="nav-icon fas fa-link"></i>
@@ -200,10 +243,11 @@
                             @if (auth()->check() && auth()->user()->role === 'user')
                                 <li class="nav-item">
                                     <a href="{{ route('user.dashboard.index') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <i class="nav-icon fas fa-home"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
+
 
                                 <li class="nav-item">
                                     <a href="{{ route('user.pesanan.index') }}" class="nav-link">
@@ -211,10 +255,25 @@
                                         <p>Pesanan Saya</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="{{ route('user.deposit.index') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <i class="nav-icon fas fa-credit-card"></i>
                                         <p>Riwayat Deposit</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('user.profil.edit') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-user"></i>
+                                        <p>Profil Saya</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('user.chat.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-comments"></i>
+                                        <p>Chat Admin</p>
                                     </a>
                                 </li>
                             @endif
@@ -256,6 +315,70 @@
 
 
         @stack('js')
+        <!-- Floating Chat Button -->
+        @auth
+            @if (auth()->user()->role === 'user')
+                <a href="{{ route('user.chat.index') }}" class="chat-float" title="Chat Admin">
+                    <i class="fas fa-comment-dots"></i>
+                </a>
+
+                <style>
+                    .chat-float {
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #007bff;
+                        color: white;
+                        border-radius: 50%;
+                        width: 60px;
+                        height: 60px;
+                        font-size: 26px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                        z-index: 9999;
+                        transition: background 0.3s;
+                    }
+
+                    .chat-float:hover {
+                        background: #0056b3;
+                    }
+                </style>
+            @endif
+        @endauth
+
+        @auth
+            @if (auth()->user()->role === 'admin')
+                <a href="{{ route('admin.chat.userlist') }}" class="chat-float" title="Chat Admin">
+                    <i class="fas fa-comment-dots"></i>
+                </a>
+
+                <style>
+                    .chat-float {
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #007bff;
+                        color: white;
+                        border-radius: 50%;
+                        width: 60px;
+                        height: 60px;
+                        font-size: 26px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                        z-index: 9999;
+                        transition: background 0.3s;
+                    }
+
+                    .chat-float:hover {
+                        background: #0056b3;
+                    }
+                </style>
+            @endif
+        @endauth
     </body>
 
     </html>

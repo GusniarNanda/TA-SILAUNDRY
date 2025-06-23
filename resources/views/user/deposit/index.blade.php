@@ -46,8 +46,13 @@
                                         @elseif ($deposit->status === 'Diterima')
                                             <span class="badge bg-secondary">Diterima</span>
                                         @elseif ($deposit->status === 'Ditolak')
-                                            <span class="badge bg-danger">Ditolak</span><br>
-                                            <small class="text-muted">Alasan: {{ $deposit->alasan_penolakan }}</small>
+                                            <span class="badge bg-danger">Ditolak</span>
+                                            @if ($deposit->alasan_penolakan)
+                                                <br><small class="text-muted">Alasan:
+                                                    {{ $deposit->alasan_penolakan }}</small>
+                                            @else
+                                                <br><small class="text-muted">Ditolak karena melebihi batas waktu</small>
+                                            @endif
                                         @else
                                             <span class="badge bg-success">{{ $deposit->status }}</span>
                                         @endif

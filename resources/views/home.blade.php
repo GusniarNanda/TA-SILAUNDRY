@@ -39,9 +39,9 @@
                         <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li><a class="nav-link" href="/lokasi">Lokasi Kami</a></li>
-                    <li><a class="nav-link" href="/harga">Daftar Harga</a></li>
+                    <li><a class="nav-link" href="/harga">Pricelist</a></li>
                     <li><a class="nav-link" href="/menu">Menu</a></li>
-                    <li><a class="nav-link" href="/about">About Us</a></li>
+                    <li><a class="nav-link" href="/about">Panduan</a></li>
                     <li><a class="nav-link" href="/kontak">Kontak</a></li>
                 </ul>
 

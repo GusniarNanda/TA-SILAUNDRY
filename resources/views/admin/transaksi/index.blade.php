@@ -40,7 +40,7 @@
                             @forelse ($transaksis as $transaksi)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $transaksi->pesanan->nama ?? '-' }}</td>
+                                    <td>{{ $transaksi->user->name ?? '-' }}</td>
                                     <td class="text-center">{{ $transaksi->berat }} kg</td>
                                     <td class="text-end">
                                         Rp

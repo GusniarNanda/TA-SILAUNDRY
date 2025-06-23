@@ -39,9 +39,9 @@
                             @forelse ($pesanan as $item)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $item->nama }}</td>
-                                    <td>{{ $item->no_hp }}</td>
-                                    <td>{{ $item->alamat }}</td>
+                                    <td>{{ $item->user->name }}</td>
+                                    <td>{{ $item->user->no_telepon }}</td>
+                                    <td>{{ $item->user->alamat }}</td>
                                     <td>{{ $item->kategoriPakaian->nama_kategori ?? '-' }}</td>
                                     <td>{{ $item->layanan->nama_layanan ?? '-' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->waktu_jemput)->format('d M Y H:i') }}</td>

@@ -19,7 +19,8 @@
     <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('assets/images/pelangi.png') }}" alt="Pelangi Laundry" style="width: 60px; height: 60px;" />
+                <img src="{{ asset('assets/images/pelangi.png') }}" alt="Pelangi Laundry"
+                    style="width: 60px; height: 60px;" />
                 Pelangi Laundry<span>.</span>
             </a>
 
@@ -37,13 +38,13 @@
                         <a class="nav-link" href="{{ url('/lokasi') }}">Lokasi Kami</a>
                     </li>
                     <li class="nav-item @yield('harga_active')">
-                        <a class="nav-link" href="{{ url('/harga') }}">Daftar Harga</a>
+                        <a class="nav-link" href="{{ url('/harga') }}">Pricelist</a>
                     </li>
                     <li class="nav-item @yield('menu_active')">
                         <a class="nav-link" href="{{ url('/menu') }}">Menu</a>
                     </li>
                     <li class="nav-item @yield('about_active')">
-                        <a class="nav-link" href="{{ url('/about') }}">About Us</a>
+                        <a class="nav-link" href="{{ url('/about') }}">Panduan</a>
                     </li>
                     <li class="nav-item @yield('kontak_active')">
                         <a class="nav-link" href="{{ url('/kontak') }}">Kontak</a>
@@ -53,7 +54,8 @@
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-2" href="{{ route('login') }}">
-                            <img src="{{ asset('assets/images/user.svg') }}" alt="User Icon" style="width: 20px; height: 20px;" />
+                            <img src="{{ asset('assets/images/user.svg') }}" alt="User Icon"
+                                style="width: 20px; height: 20px;" />
                             <span>Login</span>
                         </a>
                     </li>

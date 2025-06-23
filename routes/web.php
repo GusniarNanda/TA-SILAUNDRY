@@ -16,6 +16,8 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUser;
 use App\Http\Middleware\IsOwner;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ChatController;
 
 // Halaman publik (landing page dan halaman statis)
 Route::get('/', fn() => view('home'));
@@ -105,6 +107,12 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/deposit/approve/{id}', [DepositController::class, 'adminApprove'])->name('admin.deposit.approve');
     Route::post('/deposit/reject/{id}', [DepositController::class, 'adminReject'])->name('admin.deposit.reject');
     Route::get('/deposit/create', [DepositController::class, 'create'])->name('admin.deposit.create');
+    
+    // Route chat untuk admin
+    Route::get('/chat', [ChatController::class, 'adminUserList'])->name('admin.chat.userlist');
+    Route::get('/chat/{userId}', [ChatController::class, 'adminView'])->name('admin.chat.index');
+    Route::post('/chat/{userId}/send', [ChatController::class, 'adminSend'])->name('admin.chat.send');
+
 
 
 });
@@ -131,6 +139,12 @@ Route::prefix('user')->middleware(['auth', IsUser::class])->group(function () {
     Route::get('/deposit', [DepositController::class, 'index'])->name('user.deposit.index');
     Route::get('/deposit/create', [DepositController::class, 'create'])->name('user.deposit.create');
     Route::post('/deposit', [DepositController::class, 'store'])->name('user.deposit.store');
+    Route::get('/profil', [App\Http\Controllers\ProfilController::class, 'edit'])->name('user.profil.edit');
+    Route::post('/profil', [App\Http\Controllers\ProfilController::class, 'update'])->name('user.profil.update');
+    // Fitur Chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('user.chat.index');
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('user.chat.send');
+
    
 });
     // Route::get('/pelanggan', [PelangganController::class, 'index'])->name('user.pelanggan.index');

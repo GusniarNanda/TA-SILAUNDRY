@@ -26,35 +26,28 @@
             @csrf
             @method('PUT')
 
-            <!-- Nama -->
+          <!-- Nama (readonly) -->
             <div class="form-group">
                 <label for="nama">Nama</label>
-                <input type="text" id="nama" name="nama" class="form-control"
-                    value="{{ old('nama', $pesanan->nama) }}" required>
-                @error('nama')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+                <input type="text" id="nama" class="form-control" 
+                    value="{{ $pesanan->user->name ?? '-' }}" readonly>
             </div>
 
-            <!-- No HP -->
+            <!-- No HP (readonly) -->
             <div class="form-group">
                 <label for="no_hp">No HP</label>
-                <input type="text" id="no_hp" name="no_hp" class="form-control"
-                    value="{{ old('no_hp', $pesanan->no_hp) }}" required>
-                @error('no_hp')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+                <input type="text" id="no_hp" class="form-control"
+                    value="{{ $pesanan->user->no_telepon ?? '-' }}" readonly>
             </div>
 
-            <!-- Alamat -->
+            <!-- Alamat (readonly) -->
             <div class="form-group">
                 <label for="alamat">Alamat</label>
-                <input type="text" id="alamat" name="alamat" class="form-control"
-                    value="{{ old('alamat', $pesanan->alamat) }}" required>
-                @error('alamat')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+                <textarea id="alamat" class="form-control" rows="2" readonly>{{ $pesanan->user->alamat ?? '-' }}</textarea>
             </div>
+
+
+            
 
             <!-- Kategori Pakaian -->
             <div class="form-group">

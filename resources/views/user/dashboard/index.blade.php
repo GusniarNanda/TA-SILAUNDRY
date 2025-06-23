@@ -35,7 +35,7 @@
                 <div class="card text-white bg-info mb-3 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Jumlah Transaksi</h5>
-                        <p class="card-text h4">2</p>
+                        <p class="card-text h4">{{ $user->transaksi()->count() }}</p>
                     </div>
                 </div>
             </div>

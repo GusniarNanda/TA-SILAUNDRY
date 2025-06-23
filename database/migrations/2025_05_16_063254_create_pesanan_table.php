@@ -14,9 +14,9 @@ return new class extends Migration
             // Tambahan kolom user_id
             $table->unsignedBigInteger('user_id');
 
-            $table->string('nama');
-            $table->string('no_hp', 20);
-            $table->text('alamat');
+            // $table->string('nama');
+            // $table->string('no_hp', 20);
+            // $table->text('alamat');
 
             $table->unsignedBigInteger('kategori_pakaian_id');
             $table->unsignedBigInteger('layanan_id');

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DepositController extends Controller
 {
@@ -16,10 +17,24 @@ class DepositController extends Controller
     public function index()
     {
         $user = Auth::user();
-
-        return view('user.deposit.index', [
-            'deposits' => $user instanceof \App\Models\User ? $user->deposit()->orderBy('created_at', 'desc')->get() : collect(),
-        ]);
+    
+        if ($user instanceof \App\Models\User) {
+            // Update status jadi 'Ditolak' kalau sudah kadaluarsa
+            $user->deposit()
+                ->where('status', 'Menunggu')
+                ->where('expired_at', '<', Carbon::now())
+                ->update([
+                    'status' => 'Ditolak',
+                    'alasan_penolakan' => 'Batas Waktu Sudah Habis',
+                ]);
+    
+            // Ambil semua data deposit untuk ditampilkan
+            $deposits = $user->deposit()->orderBy('created_at', 'desc')->get();
+        } else {
+            $deposits = collect();
+        }
+    
+        return view('user.deposit.index', ['deposits' => $deposits]);
     }
 
     /**
@@ -58,6 +73,7 @@ class DepositController extends Controller
             $deposit->status = 'Menunggu'; // Status awal deposit
             $deposit->nominal_before = $user->saldo; // Nilai awal sebelum deposit
             $deposit->nominal = $request->nominal; // Nominal deposit
+            $deposit->expired_at = Carbon::now()->addMinutes(5); // Waktu deposit berakhir
 
             $deposit->save();
 
@@ -107,7 +123,11 @@ class DepositController extends Controller
     public function adminindex()
     {
         $deposits = Deposit::with('user')->orderBy('created_at', 'desc')->get();
-
+        foreach ($deposits as $deposit) {
+            if($deposit->expired_at < Carbon::now()&&$deposit->status == 'Menunggu'){
+                $deposit->delete();
+            }        
+         }
         return view('admin.deposit.index', [
             'deposits' => $deposits,
         ]);
