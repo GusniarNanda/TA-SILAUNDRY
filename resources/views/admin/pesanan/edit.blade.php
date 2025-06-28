@@ -120,6 +120,7 @@
                     <span class="badge {{ $badgeClass }}">{{ $pesanan->status }}</span>
                 </label>
                 <select id="status" name="status" class="form-control" required>
+                    <option value="Menunggu" {{ old('status', $pesanan->status) == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
                     <option value="Diterima" {{ old('status', $pesanan->status) == 'Diterima' ? 'selected' : '' }}>Diterima
                     </option>
                     <option value="Diproses" {{ old('status', $pesanan->status) == 'Diproses' ? 'selected' : '' }}>Diproses

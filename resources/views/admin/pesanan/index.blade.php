@@ -1,9 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('judul', 'Daftar Pesanan')
-@section('subjudul', 'Pesanan Laundry')
-
+{{-- @section('judul', 'Daftar Pesanan') --}}
+{{-- @section('subjudul', 'Pesanan Laundry') --}}
+@section('title', 'Daftar Pesanan')
 @section('content')
+
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
@@ -12,6 +13,10 @@
             <div class="card-body">
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
 
                 {{-- <div class="text-end mb-3">
@@ -83,11 +88,54 @@
                                                     <i class="fas fa-trash me-1"></i> Hapus
                                                 </button>
                                             </form>
+                                            @if ($pesanan->status === 'Menunggu')
+                                                <a href="{{ route('admin.pesanan.acc', $pesanan->id) }}"
+                                                    class="btn btn-success btn-sm text-white rounded-2 shadow-sm px-3 py-2">
+                                                    <i class="fas fa-check me-1"></i> Acc
+                                                </a>
 
-                                            <a href="{{ route('admin.pesanan.acc', $pesanan->id) }}"
-                                                class="btn btn-success btn-sm text-white rounded-2 shadow-sm px-3 py-2">
-                                                <i class="fas fa-check me-1"></i> Acc
-                                            </a>
+                                                <button type="button"
+                                                    class="btn btn-danger btn-sm text-white rounded-2 shadow-sm px-3 py-2"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#rejectModal{{ $pesanan->id }}">
+                                                    <i class="fas fa-times me-1"></i> Tolak
+                                                </button>
+
+                                                <!-- Modal Tolak -->
+                                                <div class="modal fade" id="rejectModal{{ $pesanan->id }}" tabindex="-1"
+                                                    aria-labelledby="rejectModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="rejectModalLabel">Catatan
+                                                                    Penolakan</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form
+                                                                    action="{{ route('admin.pesanan.reject', $pesanan->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <div class="mb-3">
+                                                                        <label for="catatan"
+                                                                            class="form-label">Catatan</label>
+                                                                        <textarea class="form-control" id="catatan" name="catatan" rows="3" required></textarea>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Batal</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-danger">OK</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+
                                         </div>
                                     </td>
                                 </tr>

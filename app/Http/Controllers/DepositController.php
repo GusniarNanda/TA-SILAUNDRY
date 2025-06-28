@@ -73,7 +73,7 @@ class DepositController extends Controller
             $deposit->status = 'Menunggu'; // Status awal deposit
             $deposit->nominal_before = $user->saldo; // Nilai awal sebelum deposit
             $deposit->nominal = $request->nominal; // Nominal deposit
-            $deposit->expired_at = Carbon::now()->addMinutes(5); // Waktu deposit berakhir
+            $deposit->expired_at = Carbon::now()->addMinutes(30); // Waktu deposit berakhir
 
             $deposit->save();
 

@@ -6,7 +6,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h3>Form Pemesanan Laundry</h3>
+                <h3>Deposit Saldo</h3>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -16,7 +16,7 @@
                         @endforeach
                     </ul>
                 </div>
-                
+
             @endif
             <form action="{{ route('user.deposit.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -42,7 +42,7 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label for="nominal">Nominal</label>
                         <input type="number" min="0" id="nominal" name="nominal" class="form-control"
@@ -54,7 +54,8 @@
 
                     <div class="mb-3">
                         <label for="bukti" class="form-label">Upload Bukti Pembayaran</label>
-                        <input class="form-control @error('bukti') is-invalid @enderror" type="file" id="bukti" name="bukti" required>
+                        <input class="form-control @error('bukti') is-invalid @enderror" type="file" id="bukti"
+                            name="bukti" required>
                         @error('bukti')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -62,10 +63,10 @@
                         @enderror
                     </div>
 
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-success">Kirim</button>
-                    <a href="{{ route('user.deposit.index') }}" class="btn btn-secondary">Batal</a>
-                </div>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-success">Kirim</button>
+                        <a href="{{ route('user.deposit.index') }}" class="btn btn-secondary">Batal</a>
+                    </div>
             </form>
         </div>
     </div>

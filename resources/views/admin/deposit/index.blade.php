@@ -3,6 +3,64 @@
 @section('judul', 'Daftar Transaksi')
 @section('subjudul', 'Data Transaksi Laundry')
 
+@push('styles')
+    <style>
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-header h4 {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle !important;
+        }
+
+        .btn-sm {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .badge {
+            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-title {
+            font-weight: 500;
+        }
+
+        .form-select {
+            border-radius: 8px;
+        }
+
+        .img-thumbnail {
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .img-thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .alert-success {
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
@@ -50,7 +108,7 @@
                                     <td class="text-center">
                                         @if ($deposit->status === 'Menunggu')
                                             <span class="badge bg-warning text-dark">Menunggu</span>
-                                        @elseif ($deposit->status === 'Diterima')
+                                        @elseif ($deposit->status === 'Disetujui')
                                             <span class="badge bg-success">Diterima</span>
                                         @elseif ($deposit->status === 'Ditolak')
                                             <span class="badge bg-danger">Ditolak</span>

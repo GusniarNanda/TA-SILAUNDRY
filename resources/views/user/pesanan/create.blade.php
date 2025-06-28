@@ -62,54 +62,71 @@
 
                     <!-- Opsi Antar Jemput -->
                     <div class="form-group mb-3">
-                        <label for="opsi_antar_jemput">Opsi Antar Jemput</label>
+                        <label for="opsi_antar_jemput">Opsi Pengiriman</label>
                         <select name="opsi_antar_jemput" class="form-control" onchange="this.form.submit()">
                             <option value=""
                                 {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == null ? 'selected' : '' }}>--
                                 Pilih Layanan --</option>
-                            <option value="Antar Saja"
-                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Antar Saja' ? 'selected' : '' }}>
-                                Antar saja</option>
                             <option value="Jemput Saja"
                                 {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Jemput Saja' ? 'selected' : '' }}>
                                 Jemput saja</option>
+                            <option value="Antar Saja"
+                                {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Antar Saja' ? 'selected' : '' }}>
+                                Antar saja</option>
                             <option value="Antar dan Jemput"
                                 {{ old('opsi_antar_jemput', request('opsi_antar_jemput')) == 'Antar dan Jemput' ? 'selected' : '' }}>
                                 Antar dan Jemput</option>
                         </select>
+                        <div class="form-feedback">
+                            <ul>
+                                <li>
+                                    Jemput saja: Pesanan akan dijemput ke lokasi rumah pelanggan.
+                                </li>
+                                <li>
+                                    Antar saja: Pesanan akan dikirim setelah proses laundry selesai.
+                                </li>
+                                <li>
+                                    Antar dan Jemput: Pesanan akan dijemput ke lokasi rumah pelanggan dan dikirim setelah
+                                    proses laundry selesai.
+                                </li>
+                            </ul>
+                            @error('opsi_antar_jemput')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
+                        </div>
+
+                        @php
+                            $opsi = old('opsi_antar_jemput', request('opsi_antar_jemput'));
+                        @endphp
+
+                        @if ($opsi == 'Antar Saja' || $opsi == 'Antar dan Jemput')
+                            <div class="form-group mb-3">
+                                <label for="waktu_antar">Waktu Antar</label>
+                                <input type="datetime-local" name="waktu_antar" class="form-control"
+                                    value="{{ old('waktu_antar') }}">
+                            </div>
+                        @endif
+
+                        @if ($opsi == 'Jemput Saja' || $opsi == 'Antar dan Jemput')
+                            <div class="form-group mb-3">
+                                <label for="waktu_jemput">Waktu Jemput</label>
+                                <input type="datetime-local" name="waktu_jemput" class="form-control"
+                                    value="{{ old('waktu_jemput') }}">
+                            </div>
+                        @endif
+
+                        <!-- Catatan -->
+                        <div class="form-group mb-3">
+                            <label for="catatan">Catatan</label>
+                            <textarea name="catatan" class="form-control">{{ old('catatan') }}</textarea>
+                        </div>
                     </div>
 
-                    @php
-                        $opsi = old('opsi_antar_jemput', request('opsi_antar_jemput'));
-                    @endphp
-
-                    @if ($opsi == 'Antar Saja' || $opsi == 'Antar dan Jemput')
-                        <div class="form-group mb-3">
-                            <label for="waktu_antar">Waktu Antar</label>
-                            <input type="datetime-local" name="waktu_antar" class="form-control"
-                                value="{{ old('waktu_antar') }}">
-                        </div>
-                    @endif
-
-                    @if ($opsi == 'Jemput Saja' || $opsi == 'Antar dan Jemput')
-                        <div class="form-group mb-3">
-                            <label for="waktu_jemput">Waktu Jemput</label>
-                            <input type="datetime-local" name="waktu_jemput" class="form-control"
-                                value="{{ old('waktu_jemput') }}">
-                        </div>
-                    @endif
-
-                    <!-- Catatan -->
-                    <div class="form-group mb-3">
-                        <label for="catatan">Catatan</label>
-                        <textarea name="catatan" class="form-control">{{ old('catatan') }}</textarea>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-success">Kirim Pesanan</button>
+                        <a href="{{ route('user.pesanan.index') }}" class="btn btn-secondary">Batal</a>
                     </div>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-success">Kirim Pesanan</button>
-                    <a href="{{ route('user.pesanan.index') }}" class="btn btn-secondary">Batal</a>
-                </div>
             </form>
         </div>
     </div>

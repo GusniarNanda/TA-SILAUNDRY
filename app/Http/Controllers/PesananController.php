@@ -220,8 +220,8 @@ class PesananController extends Controller
             return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan sudah pernah di-Acc.');
         }
 
-        $hargaLayanan = $pesanan->layanan->harga;
-        $hargaKategori = $pesanan->kategoriPakaian->harga;
+        $hargaLayanan = $pesanan->layanan->harga_layanan;
+        $hargaKategori = $pesanan->kategoriPakaian->harga_kategori;
         $berat = $pesanan->berat;
 
         if (is_null($berat) || $berat <= 0) {
@@ -250,8 +250,18 @@ class PesananController extends Controller
             'total_bayar' => $totalBayar,
             'tanggal_bayar' => now(),
             'status_pembayaran' => 'Lunas',
+            
         ]);
 
         return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil di-Acc dan transaksi dicatat.');
+    }
+
+    public function adminReject($id, Request $request)
+    {
+        $pesanan = Pesanan::findOrFail($id);
+        $pesanan->status = 'Ditolak';
+        $pesanan->catatan = $request->catatan??'-';
+        $pesanan->save();
+        return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil ditolak.');
     }
 }

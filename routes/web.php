@@ -62,6 +62,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::put('/pesanan/{id}', [PesananController::class, 'adminUpdate'])->name('admin.pesanan.update');
     Route::delete('/pesanan/{id}', [PesananController::class, 'adminDestroy'])->name('admin.pesanan.destroy');
     Route::get('/pesanan/{id}/acc', [PesananController::class, 'adminAcc'])->name('admin.pesanan.acc');
+    Route::post('/pesanan/{id}/reject', [PesananController::class, 'adminReject'])->name('admin.pesanan.reject');
     
     // Set Pesanan Selesai dan Kurangi Saldo
     // Route::post('/pesanan/{id}/selesai', [PesananController::class, 'setSelesaiDanKurangiSaldo'])->name('admin.pesanan.selesai');

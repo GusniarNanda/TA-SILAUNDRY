@@ -1,13 +1,13 @@
 @extends('layouts.dashboard')
 
-@section('judul', 'Daftar Transaksi')
-@section('subjudul', 'Data Transaksi Laundry')
+@section('judul', 'Daftar Deposit')
+@section('subjudul', 'Data Deposit Laundry')
 
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Daftar Transaksi</h4>
+                <h4 class="mb-0">Daftar Deposit</h4>
             </div>
             <div class="card-body">
                 @if (session('success'))
@@ -16,7 +16,7 @@
 
                 <div class="text-end mb-3">
                     <a href="{{ route('user.deposit.create') }}" class="btn btn-success shadow-sm">
-                        <i class="fas fa-plus"></i> Tambah Transaksi
+                        <i class="fas fa-plus"></i> Deposit Sekarang
                     </a>
                 </div>
 
