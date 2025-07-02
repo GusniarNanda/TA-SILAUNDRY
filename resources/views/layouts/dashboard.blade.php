@@ -41,8 +41,7 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 
     @stack('css')
@@ -53,7 +52,7 @@
         }
 
         .main-sidebar {
-            background-color: #3374ff;
+            background-color: #3b5d50;
         }
 
         .main-sidebar .nav-link,
@@ -66,7 +65,7 @@
         }
 
         .user-panel {
-            background-color: #3374ff;
+            background-color: #3b5d50;
         }
 
         .text-sky-blue {
@@ -113,7 +112,7 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center">
                     <div class="info text-center">
-                        <h href="#" class="d-block">laundry </h>
+                        <h href="#" class="d-block text-white">SILAUNDRY </h>
                     </div>
                 </div>
 
@@ -122,7 +121,7 @@
                         @auth
                             <a href="#" class="d-block">
                                 <b>Selamat datang,</b><br>
-                                <span class="fs-5 text-sky-blue"><b>{{ Auth::user()->name }}</b></span>
+                                <span class="fs-5 text-white"><b>{{ Auth::user()->name }}</b></span>
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="d-block">
@@ -293,8 +292,8 @@
             @yield('content')
         </div>
         <footer class="main-footer text-center">
-            <strong>Copyright &copy; {{ date('Y') }} <a href="#">by PT Cazh Teknologi
-                    Inovasi</a>.</strong>
+            <strong>Copyright &copy; {{ date('Y') }} <a href="#">by Pelangi Laundry
+                </a>.</strong>
         </footer>
     </div>
 
@@ -330,7 +329,7 @@
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    background: #007bff;
+                    background: #3b5d50;
                     color: white;
                     border-radius: 50%;
                     width: 60px;
@@ -345,7 +344,7 @@
                 }
 
                 .chat-float:hover {
-                    background: #0056b3;
+                    background: #cccccc;
                 }
             </style>
         @endif
@@ -362,7 +361,7 @@
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    background: #007bff;
+                    background: #3b5d50;
                     color: white;
                     border-radius: 50%;
                     width: 60px;
@@ -377,7 +376,7 @@
                 }
 
                 .chat-float:hover {
-                    background: #0056b3;
+                    background: #cccccc;
                 }
             </style>
         @endif

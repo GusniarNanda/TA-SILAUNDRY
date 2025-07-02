@@ -1,41 +1,75 @@
 @extends('layouts.dashboard')
 
-{{-- @section('judul', 'Daftar Pesanan') --}}
-{{-- @section('subjudul', 'Pesanan Laundry') --}}
 @section('title', 'Daftar Pesanan')
-@section('content')
 
+@push('styles')
+    <style>
+        .card-header h4 {
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle !important;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        .badge {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 1rem;
+        }
+
+        .btn-sm {
+            font-size: 13px;
+            padding: 6px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal .form-control {
+            font-size: 14px;
+        }
+
+        .d-flex.flex-column>*+* {
+            margin-top: 6px;
+        }
+    </style>
+@endpush
+
+@section('content')
     <div class="container mt-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">Daftar Pesanan</h4>
             </div>
             <div class="card-body">
                 @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
                 @endif
 
                 @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
+                    <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
                 @endif
 
-                {{-- <div class="text-end mb-3">
-                    <a href="{{ route('admin.pesanan.create') }}" class="btn btn-success shadow-sm">
-                        <i class="fas fa-plus"></i> Tambah Pesanan
-                    </a>
-                </div> --}}
-
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
-                        <thead class="table-light text-center">
+                    <table class="table table-hover table-striped shadow-sm">
+                        <thead class="table-light">
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>No HP</th>
                                 <th>Alamat</th>
-                                <th>Kategori Pakaian</th>
-                                <th>Jenis Layanan</th>
-                                <th>Opsi Antar Jemput</th>
+                                <th>Kategori</th>
+                                <th>Layanan</th>
+                                <th>Opsi Pengiriman</th>
                                 <th>Waktu Jemput</th>
                                 <th>Waktu Antar</th>
                                 <th>Status</th>
@@ -46,7 +80,7 @@
                         <tbody>
                             @foreach ($pesanans as $pesanan)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $pesanan->user->name }}</td>
                                     <td>{{ $pesanan->user->no_telepon }}</td>
                                     <td>{{ $pesanan->user->alamat }}</td>
@@ -55,8 +89,7 @@
                                     <td>{{ $pesanan->opsi_antar_jemput ?? '-' }}</td>
                                     <td>{{ $pesanan->waktu_jemput ?? '-' }}</td>
                                     <td>{{ $pesanan->waktu_antar ?? '-' }}</td>
-
-                                    <td class="text-center">
+                                    <td>
                                         @php
                                             $badgeClass = match ($pesanan->status) {
                                                 'Diterima' => 'bg-success',
@@ -66,39 +99,34 @@
                                                 default => 'bg-light text-dark',
                                             };
                                         @endphp
-                                        <span class="badge {{ $badgeClass }}">
-                                            {{ $pesanan->status }}
-                                        </span>
+                                        <span class="badge {{ $badgeClass }}">{{ $pesanan->status }}</span>
                                     </td>
                                     <td>{{ $pesanan->catatan }}</td>
                                     <td>
-                                        <div class="d-flex flex-column" style="gap: 6px;">
+                                        <div class="d-flex flex-column">
                                             <a href="{{ route('admin.pesanan.edit', $pesanan->id) }}"
-                                                class="btn btn-warning btn-sm text-white rounded-2 shadow-sm px-3 py-2">
-                                                <i class="fas fa-pen me-1"></i> Edit
+                                                class="btn btn-warning btn-sm text-white shadow-sm">
+                                                <i class="fas fa-pen"></i> Edit
                                             </a>
-
                                             <form action="{{ route('admin.pesanan.destroy', $pesanan->id) }}"
-                                                method="POST" style="width: 100%;">
+                                                method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit"
-                                                    class="btn btn-danger btn-sm text-white rounded-2 shadow-sm px-3 py-2 w-100"
-                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?')">
-                                                    <i class="fas fa-trash me-1"></i> Hapus
+                                                <button type="submit" class="btn btn-danger btn-sm shadow-sm"
+                                                    onclick="return confirm('Yakin ingin menghapus pesanan ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
                                                 </button>
                                             </form>
+
                                             @if ($pesanan->status === 'Menunggu')
                                                 <a href="{{ route('admin.pesanan.acc', $pesanan->id) }}"
-                                                    class="btn btn-success btn-sm text-white rounded-2 shadow-sm px-3 py-2">
-                                                    <i class="fas fa-check me-1"></i> Acc
+                                                    class="btn btn-success btn-sm shadow-sm">
+                                                    <i class="fas fa-check"></i> Acc
                                                 </a>
-
-                                                <button type="button"
-                                                    class="btn btn-danger btn-sm text-white rounded-2 shadow-sm px-3 py-2"
+                                                <button type="button" class="btn btn-danger btn-sm shadow-sm"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#rejectModal{{ $pesanan->id }}">
-                                                    <i class="fas fa-times me-1"></i> Tolak
+                                                    <i class="fas fa-times"></i> Tolak
                                                 </button>
 
                                                 <!-- Modal Tolak -->
@@ -134,8 +162,6 @@
                                                     </div>
                                                 </div>
                                             @endif
-
-
                                         </div>
                                     </td>
                                 </tr>

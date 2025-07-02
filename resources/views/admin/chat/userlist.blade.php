@@ -6,7 +6,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-success text-white">
                 <h4 class="mb-0">Chat</h4>
             </div>
             <div class="list-group list-group-flush">
@@ -51,7 +51,7 @@
                                     {{ $data['unread'] }}
                                 </span>
                             @endif
-                            <span class="badge bg-primary">Chat</span>
+                            <span class="badge bg-success">Chat</span>
                         </div>
                     </a>
                 @empty

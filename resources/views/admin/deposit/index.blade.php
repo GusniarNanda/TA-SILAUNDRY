@@ -18,6 +18,7 @@
         .table th,
         .table td {
             vertical-align: middle !important;
+            font-size: 14px;
         }
 
         .btn-sm {
@@ -32,17 +33,16 @@
             border-radius: 8px;
         }
 
-        .modal-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+        .badge.bg-success {
+            background-color: #28a745;
         }
 
-        .modal-title {
-            font-weight: 500;
+        .badge.bg-warning {
+            background-color: #ffc107;
         }
 
-        .form-select {
-            border-radius: 8px;
+        .badge.bg-danger {
+            background-color: #dc3545;
         }
 
         .img-thumbnail {
@@ -58,14 +58,26 @@
             border-radius: 8px;
             font-size: 14px;
         }
+
+        .modal .form-select {
+            border-radius: 8px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .text-muted small {
+            font-size: 12px;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Daftar Transaksi</h4>
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Daftar Transaksi Deposit</h4>
             </div>
             <div class="card-body">
                 @if (session('success'))
@@ -73,7 +85,7 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
+                    <table class="table table-hover table-striped align-middle">
                         <thead class="table-light text-center">
                             <tr>
                                 <th>No</th>
@@ -89,13 +101,11 @@
                         <tbody>
                             @forelse ($deposits as $deposit)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td class="text-center">{{ optional($deposit->user)->name ?? '-' }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ optional($deposit->user)->name ?? '-' }}</td>
                                     <td>{{ $deposit->metode_pembayaran }}</td>
-                                    <td class="text-end">
-                                        Rp {{ number_format($deposit->nominal ?? 0, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-center">
+                                    <td class="text-end">Rp {{ number_format($deposit->nominal ?? 0, 0, ',', '.') }}</td>
+                                    <td>
                                         @if ($deposit->bukti)
                                             <a href="{{ asset('assets/images/' . $deposit->bukti) }}" target="_blank">
                                                 <img src="{{ asset('assets/images/' . $deposit->bukti) }}"
@@ -105,7 +115,7 @@
                                             <span class="text-muted">Tidak ada</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
                                         @if ($deposit->status === 'Menunggu')
                                             <span class="badge bg-warning text-dark">Menunggu</span>
                                         @elseif ($deposit->status === 'Disetujui')
@@ -115,28 +125,24 @@
                                             <div class="mt-1">
                                                 <small class="text-muted fst-italic">
                                                     Alasan:
-                                                    {{ !empty($deposit->alasan_penolakan)
-                                                        ? $deposit->alasan_penolakan
-                                                        : 'Otomatis ditolak karena melewati batas waktu pembayaran.' }}
+                                                    {{ $deposit->alasan_penolakan ?? 'Otomatis ditolak karena melewati batas waktu pembayaran.' }}
                                                 </small>
                                             </div>
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $deposit->created_at->format('d-m-Y H:i') }}</td>
+                                    <td>{{ $deposit->created_at->format('d-m-Y H:i') }}</td>
                                     <td>
-                                        <div class="d-flex flex-column" style="gap: 6px;">
+                                        <div class="d-flex flex-column gap-2">
                                             @if ($deposit->status === 'Menunggu')
                                                 <form action="{{ route('admin.deposit.approve', $deposit->id) }}"
                                                     method="POST">
                                                     @csrf
-                                                    <button type="submit"
-                                                        class="btn btn-warning btn-sm text-white shadow-sm px-3 py-2">
-                                                        <i class="fas fa-check me-1"></i> Approve
+                                                    <button type="submit" class="btn btn-success btn-sm shadow-sm">
+                                                        <i class="fas fa-check me-1"></i> Setujui
                                                     </button>
                                                 </form>
 
-                                                <button type="button"
-                                                    class="btn btn-danger btn-sm text-white shadow-sm px-3 py-2"
+                                                <button type="button" class="btn btn-danger btn-sm shadow-sm"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#rejectModal{{ $deposit->id }}">
                                                     <i class="fas fa-times me-1"></i> Tolak
@@ -192,7 +198,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">Belum ada transaksi deposit.</td>
+                                    <td colspan="8" class="text-center text-muted">Belum ada transaksi deposit.</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -56,7 +56,7 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>
                         <textarea name="alamat" id="alamat" rows="3" class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat', $user->alamat) }}</textarea>
                         @error('alamat')
@@ -68,7 +68,26 @@
                         @error('lon')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                    </div> --}}
+
+                    <div class="mb-3">
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea name="alamat" id="alamat" rows="3" class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat', $user->alamat) }}</textarea>
+
+                        {{-- Label status jangkauan --}}
+                        <div id="status-jangkauan" class="mt-2 fw-bold"></div>
+
+                        @error('alamat')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        @error('lat')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        @error('lon')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
 
                     <input type="hidden" name="lat" id="lat" value="{{ old('lat', $user->lat) }}">
                     <input type="hidden" name="lon" id="lon" value="{{ old('lon', $user->lon) }}">
@@ -87,22 +106,23 @@
     <script>
         const defaultLatLng = [-2.5489, 118.0149]; // Indonesia
         // Ambil dari PHP (user)
-    const latFromUser = {{ $user->latitude ?? 'null' }};
-    const lonFromUser = {{ $user->longitude ?? 'null' }};
+        const latFromUser = {{ $user->latitude ?? 'null' }};
+        const lonFromUser = {{ $user->longitude ?? 'null' }};
 
-    // Lokasi fallback kalau user belum punya koordinat
-    const userHasCoords = latFromUser !== null && lonFromUser !== null;
+        // Lokasi fallback kalau user belum punya koordinat
+        const userHasCoords = latFromUser !== null && lonFromUser !== null;
 
-    const map = L.map('map').setView(userHasCoords ? [latFromUser, lonFromUser] : defaultLatLng, userHasCoords ? 15 : 5);
+        const map = L.map('map').setView(userHasCoords ? [latFromUser, lonFromUser] : defaultLatLng, userHasCoords ? 15 :
+            5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    let marker;
-    if (userHasCoords) {
-        marker = L.marker([latFromUser, lonFromUser]).addTo(map);
-    }
+        let marker;
+        if (userHasCoords) {
+            marker = L.marker([latFromUser, lonFromUser]).addTo(map);
+        }
         // Fungsi ambil alamat dari koordinat (reverse geocoding)
         async function getAddressFromCoords(lat, lon) {
             const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
@@ -140,7 +160,10 @@
             document.getElementById('alamat').value = alamat;
             document.getElementById('lat').value = lat;
             document.getElementById('lon').value = lng;
+
+            cekJangkauan(lat, lng); // Tambahkan ini
         });
+
 
         // Debounce function
         function debounce(fn, delay) {
@@ -165,13 +188,49 @@
 
                 if (marker) {
                     marker.setLatLng([lat, lng]);
-
                 } else {
                     marker = L.marker([lat, lng]).addTo(map);
                 }
+
                 document.getElementById('lat').value = lat;
                 document.getElementById('lon').value = lng;
+
+                cekJangkauan(lat, lng); // ✅ Tambahkan baris ini
             }
+
         }, 250)); // debounce delay 800ms
+
+        const laundryLat = -7.717554;
+        const laundryLon = 109.005774;
+
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            function toRad(x) {
+                return x * Math.PI / 180;
+            }
+
+            const R = 6371;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function cekJangkauan(lat, lon) {
+            const jarak = haversineDistance(laundryLat, laundryLon, lat, lon);
+            const label = document.getElementById('status-jangkauan');
+
+            if (jarak <= 5) {
+                label.innerText = `✅ Lokasi dalam jangkauan (${jarak.toFixed(2)} km)`;
+                label.classList.remove('text-danger');
+                label.classList.add('text-success');
+            } else {
+                label.innerText = `❌ Lokasi di luar jangkauan (${jarak.toFixed(2)} km)`;
+                label.classList.remove('text-success');
+                label.classList.add('text-danger');
+            }
+        }
     </script>
 @endpush

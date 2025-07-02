@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Chat;
 use App\Models\Messages;
 use Illuminate\Support\Facades\Auth;
+
 class ChatController extends Controller
 {
     public function index()

@@ -1,12 +1,36 @@
 @extends('layouts.dashboard')
 
-@section('judul', 'Daftar Transaksi')
-@section('subjudul', 'Data Transaksi Laundry')
+@section('title', 'Daftar Transaksi')
+
+@push('styles')
+    <style>
+        .table th,
+        .table td {
+            vertical-align: middle;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .badge {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .card-header h4 {
+            font-weight: bold;
+        }
+
+        .alert {
+            font-size: 14px;
+        }
+    </style>
+@endpush
 
 @section('content')
     <div class="container mt-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">Daftar Transaksi</h4>
             </div>
             <div class="card-body">
@@ -14,15 +38,9 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                {{-- <div class="text-end mb-3">
-                    <a href="{{ route('admin.transaksi.create') }}" class="btn btn-success shadow-sm">
-                        <i class="fas fa-plus"></i> Tambah Transaksi
-                    </a>
-                </div> --}}
-
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover align-middle" style="font-size: 14px;">
-                        <thead class="table-light text-center">
+                    <table class="table table-hover table-striped align-middle shadow-sm">
+                        <thead class="table-light">
                             <tr>
                                 <th>No</th>
                                 <th>Nama Pelanggan</th>
@@ -32,67 +50,34 @@
                                 <th>Total Bayar</th>
                                 <th>Tanggal Bayar</th>
                                 <th>Status Pembayaran</th>
-                                {{-- <th>Bukti Pembayaran</th> --}}
-                                {{-- <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($transaksis as $transaksi)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $transaksi->user->name ?? '-' }}</td>
-                                    <td class="text-center">{{ $transaksi->berat }} kg</td>
+                                    <td>{{ $transaksi->berat }} kg</td>
                                     <td class="text-end">
-                                        Rp
-                                        {{ number_format($transaksi->pesanan->layanan->harga_layanan ?? 0, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-end">
-                                        Rp
-                                        {{ number_format($transaksi->pesanan->kategoriPakaian->harga_kategori ?? 0, 0, ',', '.') }}
+                                        Rp{{ number_format($transaksi->pesanan->layanan->harga_layanan ?? 0, 0, ',', '.') }}
                                     </td>
                                     <td class="text-end">
-                                        Rp {{ number_format($transaksi->total_bayar, 0, ',', '.') }}
+                                        Rp{{ number_format($transaksi->pesanan->kategoriPakaian->harga_kategori ?? 0, 0, ',', '.') }}
                                     </td>
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($transaksi->tanggal_bayar)->format('d-m-Y H:i') }}
+                                    <td class="text-end">
+                                        Rp{{ number_format($transaksi->total_bayar, 0, ',', '.') }}
                                     </td>
-                                    <td class="text-center">
+                                    <td>{{ \Carbon\Carbon::parse($transaksi->tanggal_bayar)->format('d-m-Y H:i') }}</td>
+                                    <td>
                                         <span
                                             class="badge {{ $transaksi->status_pembayaran == 'Lunas' ? 'bg-success' : 'bg-warning text-dark' }}">
                                             {{ $transaksi->status_pembayaran }}
                                         </span>
                                     </td>
-                                    {{-- <td class="text-center">
-                                        @if ($transaksi->pesanan->bukti_pembayaran)
-                                            <a href="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
-                                                target="_blank">
-                                                <img src="{{ asset('assets/images/' . $transaksi->pesanan->bukti_pembayaran) }}"
-                                                    alt="Bukti" width="80" class="img-thumbnail">
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Belum diupload</span>
-                                        @endif
-                                    </td> --}}
-                                    {{-- <td class="text-center">
-                                        <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}"
-                                            class="btn btn-sm btn-warning" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-
-                                        <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}"
-                                            method="POST" class="d-inline"
-                                            onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">Belum ada data transaksi.</td>
+                                    <td colspan="8" class="text-center text-muted">Belum ada data transaksi.</td>
                                 </tr>
                             @endforelse
                         </tbody>
