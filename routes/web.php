@@ -28,6 +28,8 @@ Route::view('/menu', 'menu')->name('menu');
 Route::view('/about', 'about')->name('about');
 Route::view('/kontak', 'kontak')->name('kontak');
 
+// route::view('/sidang'('sidang'))->name ('sidangTA');
+
 // Auth routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
@@ -148,4 +150,5 @@ Route::prefix('user')->middleware(['auth', IsUser::class])->group(function () {
 
    
 });
+
     // Route::get('/pelanggan', [PelangganController::class, 'index'])->name('user.pelanggan.index');

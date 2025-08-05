@@ -68,8 +68,8 @@
             <div class="col-md-4 col-sm-6">
                 <div class="card bg-info card-custom text-white shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title text-white-90">Jumlah Transaksi</h5>
-                        <p class="card-text">{{ $totalTransaksi }}</p>
+                        <h5 class="card-title text-white-90">Jumlah Transaksi Per Bulan</h5>
+                        <p class="card-text">{{ $totalTransaksiPerBulan }}</p>
                     </div>
                 </div>
             </div>

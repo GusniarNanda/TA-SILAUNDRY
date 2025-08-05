@@ -6,7 +6,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-success text-white">
                 <h5 class="mb-0">Edit Profil</h5>
             </div>
             <div class="card-body">
@@ -94,7 +94,7 @@
                     <div id="map" style="height: 400px;"></div>
 
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                     </div>
                 </form>
             </div>
@@ -104,26 +104,28 @@
 
 @push('js')
     <script>
+        //INISIALISASI KOORDINAT AWAL 
         const defaultLatLng = [-2.5489, 118.0149]; // Indonesia
         // Ambil dari PHP (user)
         const latFromUser = {{ $user->latitude ?? 'null' }};
         const lonFromUser = {{ $user->longitude ?? 'null' }};
 
-        // Lokasi fallback kalau user belum punya koordinat
+        // PENGATURAN MAP SUPAYA MENAPILKAN LOKASI DARI USER (KALAU ADA) KALO GA ADA BERARTI TAMPILAN DEFAULT MAP INDONESIA
         const userHasCoords = latFromUser !== null && lonFromUser !== null;
-
         const map = L.map('map').setView(userHasCoords ? [latFromUser, lonFromUser] : defaultLatLng, userHasCoords ? 15 :
             5);
 
+        //MENAMPILKAN PETA DADSAR DARI OPEN STREET MAP 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        //JIKA USER PUNYA KOORDINAT MAKA MENAMPILKAN TANDA DI MAP DI LOKASI USER 
         let marker;
         if (userHasCoords) {
             marker = L.marker([latFromUser, lonFromUser]).addTo(map);
         }
-        // Fungsi ambil alamat dari koordinat (reverse geocoding)
+        // AMBIL ALAMAT LENGKAP BERDASARKAN TITIK KOORDINAT YANG DI KLIK 
         async function getAddressFromCoords(lat, lon) {
             const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
             const response = await fetch(url);
@@ -131,7 +133,7 @@
             return data.display_name;
         }
 
-        // Fungsi ambil koordinat dari alamat (forward geocoding)
+        // MENGUBAH INPUT ALAMAT JADI KOORDINAT 
         async function getCoordsFromAddress(address) {
             const url =
                 `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
@@ -143,7 +145,7 @@
             return null;
         }
 
-        // Saat user klik di map
+        // SAAT USER KLIK MAP MAKA TANDA PINDAH KE LOKASI 
         map.on('click', async function(e) {
             const {
                 lat,
@@ -165,7 +167,7 @@
         });
 
 
-        // Debounce function
+        // JIKA USER TIDAK MENGETIKKAN ALAMAT LEBIH DARI 250ms MAKA ALAMAT AKAN DIUBAH JADI KOORDINAT 
         function debounce(fn, delay) {
             let timeout;
             return function(...args) {
@@ -174,8 +176,8 @@
             };
         }
 
-        // Saat input textarea diketik
-        const alamatInput = document.getElementById('alamat');
+        // MENGUBAH INPUT ALAMAT DARI TEKS DARI USER MENJADI LOKASI DALAM BENTUK KOORDINAT DI PETA SECARA OTOMATIS 
+        const alamatInput = document.getElementById('alamat'); //MENANGKAP INPUTAN ALAMAT 
         alamatInput.addEventListener('input', debounce(async function() {
             const alamat = this.value.trim();
             if (alamat.length < 5) return; // hindari request untuk input terlalu pendek
@@ -195,14 +197,16 @@
                 document.getElementById('lat').value = lat;
                 document.getElementById('lon').value = lng;
 
-                cekJangkauan(lat, lng); // ✅ Tambahkan baris ini
+                cekJangkauan(lat, lng);
             }
 
         }, 250)); // debounce delay 800ms
 
+
+
         const laundryLat = -7.717554;
         const laundryLon = 109.005774;
-
+        //FUNGSI UNTUK PERHITUNGAN JARAK DENGAN FUNGSI HAVERSINE UNTUK MENENTUKAN JARAK DARI LOKASI USER KE LOKASI LAUNDRY
         function haversineDistance(lat1, lon1, lat2, lon2) {
             function toRad(x) {
                 return x * Math.PI / 180;
@@ -218,6 +222,7 @@
             return R * c;
         }
 
+        //FUNGSI UNTUK MENGECEK JANGKAUAN LAYANAN LAUNDRY
         function cekJangkauan(lat, lon) {
             const jarak = haversineDistance(laundryLat, laundryLon, lat, lon);
             const label = document.getElementById('status-jangkauan');

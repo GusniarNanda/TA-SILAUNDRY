@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         // Nonaktifkan foreign key check
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        User::truncate(); // Aman sekarang
+        User::truncate(); 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // Tambahkan data user

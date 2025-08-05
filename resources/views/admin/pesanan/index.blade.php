@@ -72,6 +72,7 @@
                                 <th>Opsi Pengiriman</th>
                                 <th>Waktu Jemput</th>
                                 <th>Waktu Antar</th>
+                                <th>Metode Pembayaran</th>
                                 <th>Status</th>
                                 <th>Catatan</th>
                                 <th>Aksi</th>
@@ -89,6 +90,7 @@
                                     <td>{{ $pesanan->opsi_antar_jemput ?? '-' }}</td>
                                     <td>{{ $pesanan->waktu_jemput ?? '-' }}</td>
                                     <td>{{ $pesanan->waktu_antar ?? '-' }}</td>
+                                    <td>{{ $pesanan->metode_pembayaran ?? '-' }}</td>
                                     <td>
                                         @php
                                             $badgeClass = match ($pesanan->status) {

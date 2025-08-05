@@ -41,7 +41,7 @@
                         <a class="nav-link" href="{{ url('/harga') }}">Pricelist</a>
                     </li>
                     <li class="nav-item @yield('menu_active')">
-                        <a class="nav-link" href="{{ url('/menu') }}">Menu</a>
+                        <a class="nav-link" href="{{ url('/menu') }}">Layanan</a>
                     </li>
                     <li class="nav-item @yield('about_active')">
                         <a class="nav-link" href="{{ url('/about') }}">Panduan</a>

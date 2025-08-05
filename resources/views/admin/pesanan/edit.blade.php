@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.pesanan.update', $pesanan->id) }}" method="POST">
+        <form action="{{ route('admin.pesanan.update', $pesanan->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -46,8 +46,6 @@
                 <textarea id="alamat" class="form-control" rows="2" readonly>{{ $pesanan->user->alamat ?? '-' }}</textarea>
             </div>
 
-
-            
 
             <!-- Kategori Pakaian -->
             <div class="form-group">
@@ -103,6 +101,20 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            @if (!$pesanan->berat)
+            <div class="mb-3">  
+                <label for="bukti_timbangan" class="form-label">Upload Bukti Berat</label>
+                <input class="form-control @error('bukti_timbangan') is-invalid @enderror" type="file" id="bukti_timbangan"
+                    name="bukti_timbangan" required>
+                @error('bukti_timbangan')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            @endif
+    
 
             <!-- Status -->
             <div class="form-group">

@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <!-- Contoh Card Tambahan -->
+            <!-- CARD TOTAL PESANAN-->
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3 shadow">
                     <div class="card-body">
@@ -41,6 +41,6 @@
             </div>
         </div>
 
-        <!-- Tambahan konten lain di sini -->
+        
     </div>
 @endsection

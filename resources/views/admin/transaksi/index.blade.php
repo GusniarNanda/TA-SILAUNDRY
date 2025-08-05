@@ -30,7 +30,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div class="card-header bg-success text-white d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">Daftar Transaksi</h4>
             </div>
             <div class="card-body">

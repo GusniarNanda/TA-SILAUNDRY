@@ -10,6 +10,8 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    //MENAMPILKAN DATA KATEGORI PAKAIAN KEDALAM TAMPILAN INDEX
     public function index()
     {
         $kategori = KategoriPakaian::all();
@@ -19,6 +21,8 @@ class KategoriController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
+     //MENAMPILKAN FORM UNTUK TAMBAH DATA KATEGORI PAKAIAN
     public function create()
     {
         return view('admin.kategori.create');
@@ -27,6 +31,8 @@ class KategoriController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+     //MENYIMPAN DATA KATEGORI PAKAIAN KEDALAM DATABASE 
     public function store(Request $request)
     { 
         $request->validate([
@@ -54,6 +60,8 @@ class KategoriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
+     //MENAMPILKAN FORM EDIT UNTUK KATEGORI PAKAIAN YANG AKAN DIEDIT 
     public function edit($id)
     {
         $kategori = KategoriPakaian::findOrFail($id);
@@ -63,6 +71,8 @@ class KategoriController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+     //MENYIMPAN PERUBAHAN DARI DATA KATEGORI YANG BARU DIEDIT KEDALAM DATABASE DENGAN CARA AMBIL DATA BERDASARKAN ID -> UPDATE LALU SIMPAN KE DB
     public function update(Request $request, string $id)
 {
     $request->validate([
@@ -83,6 +93,8 @@ class KategoriController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     //UNTUK MENGHAPUS SALAH SATU KATEGORI BERDASARKAN ID KATEGORINYA -> AMBIL DATA KATEGORI BERDASARKAN ID -> LALU HAPUS DARI DB
     public function destroy(string $id)
     {
         $kategori = KategoriPakaian::findOrFail($id);

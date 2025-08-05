@@ -23,11 +23,11 @@ class LoginController extends Controller
             $user = Auth::user();
     
             if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard.index');
+                return redirect()->route('admin.dashboard.index'); //untuk admin
             } elseif ($user->role === 'owner') {
-                return redirect()->route('owner.dashboard');
+                return redirect()->route('owner.dashboard'); //untuk owner (pemilik)
             } elseif ($user->role === 'user') {
-                return redirect()->route('user.dashboard.index'); // misalnya untuk user biasa
+                return redirect()->route('user.dashboard.index'); //user
             }
         }
     

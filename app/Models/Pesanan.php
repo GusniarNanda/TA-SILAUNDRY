@@ -17,8 +17,8 @@ class Pesanan extends Model
         'nama',
         'no_hp',
         'alamat',
-        'kategori_pakaian_id',  // ini foreign key
-        'layanan_id',           // ini foreign key
+        'kategori_pakaian_id',  
+        'layanan_id',           
         'waktu_jemput',
         'waktu_antar',
         'opsi_antar_jemput',
@@ -26,11 +26,11 @@ class Pesanan extends Model
         'catatan',
         'user_id',
         'berat',
+        'bukti_timbangan',
+        'metode_pembayaran',
     ];
 
-    // Pastikan import model relasi di atas file ini:
-    // use App\Models\KategoriPakaian;
-    // use App\Models\Layanan;
+    
 
     public function kategoriPakaian()
     {

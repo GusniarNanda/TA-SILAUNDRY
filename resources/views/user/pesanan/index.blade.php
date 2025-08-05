@@ -6,7 +6,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-success text-white">
                 <h4 class="mb-0">Pesanan Saya</h4>
             </div>
             <div class="card-body">
@@ -31,6 +31,8 @@
                                 <th>Kategori Pakaian</th>
                                 <th>Jenis Layanan</th>
                                 <th>Waktu Jemput</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Berat</th>
                                 <th>Status</th>
                                 <th>Catatan</th>
                             </tr>
@@ -45,6 +47,15 @@
                                     <td>{{ $item->kategoriPakaian->nama_kategori ?? '-' }}</td>
                                     <td>{{ $item->layanan->nama_layanan ?? '-' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->waktu_jemput)->format('d M Y H:i') }}</td>
+                                    <td>{{ $item->metode_pembayaran ?? '-' }}</td>
+                                    <td>{{ $item->berat }}
+                                        @if ($item->bukti_timbangan)
+                                            <a href="{{ asset('uploads/bukti_timbangan/' . $item->bukti_timbangan) }}">
+                                                <img src="{{ asset('uploads/bukti_timbangan/' . $item->bukti_timbangan) }}"
+                                                    class="img-fluid" alt="Bukti Timbangan" style="width: 100px;">
+                                            </a>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @php
                                             $badgeClass = match ($item->status) {

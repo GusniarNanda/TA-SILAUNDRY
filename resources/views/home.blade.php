@@ -40,7 +40,7 @@
                     </li>
                     <li><a class="nav-link" href="/lokasi">Lokasi Kami</a></li>
                     <li><a class="nav-link" href="/harga">Pricelist</a></li>
-                    <li><a class="nav-link" href="/menu">Menu</a></li>
+                    <li><a class="nav-link" href="/menu">Layanan</a></li>
                     <li><a class="nav-link" href="/about">Panduan</a></li>
                     <li><a class="nav-link" href="/kontak">Kontak</a></li>
                 </ul>
@@ -99,11 +99,11 @@
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <a class="product-item" href="cart.html">
                         <img src="{{ asset('assets/images/product-1.png') }}" class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Cuci Satuan</h3>
-                        <strong class="product-price">Rp.8.000</strong>
-                        <span class="icon-cross">
+                        <h3 class="product-title">Cuci Kering</h3>
+                        <strong class="product-price">Rp.4.000</strong>
+                        {{-- <span class="icon-cross">
                             <img src="{{ asset('assets/images/cross.svg') }}" class="img-fluid">
-                        </span>
+                        </span> --}}
                     </a>
                 </div>
                 <!-- End Column 2 -->
@@ -112,12 +112,12 @@
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <a class="product-item" href="cart.html">
                         <img src="{{ asset('assets/images/product-2.png') }}" class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Cuci Kiloan</h3>
-                        <strong class="product-price">Rp6.500/Kg</strong>
+                        <h3 class="product-title">Cuci Setrika</h3>
+                        <strong class="product-price">Rp5.000/Kg</strong>
 
-                        <span class="icon-cross">
+                        {{-- <span class="icon-cross">
                             <img src="{{ asset('assets/images/cross.svg') }}" class="img-fluid">
-                        </span>
+                        </span> --}}
                     </a>
                 </div>
                 <!-- End Column 3 -->
@@ -127,10 +127,10 @@
                     <a class="product-item" href="cart.html">
                         <img src="{{ asset('assets/images/product-3.png') }}" class="img-fluid product-thumbnail">
                         <h3 class="product-title">Cuci Express</h3>
-                        <strong class="product-price">Rp.15.000/Kg</strong>
-                        <span class="icon-cross">
+                        <strong class="product-price">Rp.8.000/Kg</strong>
+                        {{-- <span class="icon-cross">
                             <img src="{{ asset('assets/images/cross.svg') }}" class="img-fluid">
-                        </span>
+                        </span> --}}
                     </a>
                 </div>
                 <!-- End Column 4 -->
@@ -164,8 +164,7 @@
                         <div class="col-6 col-md-6">
                             <div class="feature">
                                 <div class="icon">
-                                    <img src="{{ asset('assets/images/bag.svg') }}" alt="Image"
-                                        class="imf-fluid">
+                                    <img src="{{ asset('assets/images/bag.svg') }}" alt="Image" class="imf-fluid">
                                 </div>
                                 <h3>Pelayanan Cepat </h3>
                                 <p>Kami mengutamakan kecepatan dalam layanan laundry kami dan tetap mengutamakan

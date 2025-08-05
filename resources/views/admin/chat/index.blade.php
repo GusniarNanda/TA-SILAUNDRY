@@ -37,7 +37,7 @@
         }
 
         .chat-bubble-right {
-            background-color: #0d6efd;
+            background-color: #198754;
             color: #fff;
             border-top-right-radius: 0;
         }
@@ -67,7 +67,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">💬 Chat dengan {{ $user->name }}</h4>
-            <a href="{{ route('admin.chat.userlist') }}" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('admin.chat.userlist') }}" class="btn btn-outline-success btn-sm">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
         </div>
@@ -99,7 +99,7 @@
             @csrf
             <div class="input-group shadow-sm">
                 <input type="text" name="message" class="form-control" placeholder="Tulis pesan..." required>
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-success" type="submit">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>

@@ -6,7 +6,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-success text-white">
                 <h4 class="mb-0">Daftar Deposit</h4>
             </div>
             <div class="card-body">

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Chat extends Model
 {
-    protected $table = 'messages'; // pastikan pakai nama tabel yang benar jika model tidak sama dengan nama tabel
+    protected $table = 'messages'; 
 
     protected $fillable = [
         'from_user_id',

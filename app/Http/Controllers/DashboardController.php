@@ -13,11 +13,13 @@ class DashboardController extends Controller
     // Dashboard admin
     public function index()
     {
+
         $totalPemasukkan = Transaksi::sum('total_bayar');
         $totalPelanggan = Pelanggan::count();
         $totalTransaksi = Transaksi::count();
+        $totalTransaksiPerBulan = Transaksi::where('tanggal_bayar', '>=', now()->subDays(30))->count();
 
-        return view('admin.dashboard.index', compact('totalPemasukkan', 'totalPelanggan', 'totalTransaksi'));
+        return view('admin.dashboard.index', compact('totalPemasukkan', 'totalPelanggan', 'totalTransaksi', 'totalTransaksiPerBulan')); 
     }
 
     // Dashboard user
@@ -36,7 +38,6 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $pesanan = Pesanan::where('user_id', $user->id)->get();
-
         return view('user.pesanan.index', compact('pesanan'));
     }
 
